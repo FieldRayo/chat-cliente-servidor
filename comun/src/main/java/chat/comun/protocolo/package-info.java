@@ -1,0 +1,6 @@
+/**
+ * <b>Dueño: Integrante 01 · Arquitectura</b> (comun)
+ * <p>Formato de los mensajes de red: clase Paquete y enum Tipo con TODOS los tipos de mensaje.
+ * Cualquier tipo nuevo se le pide al integrante 01.
+ */
+package chat.comun.protocolo;

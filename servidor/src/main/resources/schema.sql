@@ -1,0 +1,3 @@
+-- Dueño: Integrante 02 · Base de datos
+-- Esquema SQLite. Usar FOREIGN KEY ... ON DELETE CASCADE para el borrado en cascada.
+-- Recuerda: SQLite requiere `PRAGMA foreign_keys = ON;` en cada conexión.

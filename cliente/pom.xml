@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Dueño: Integrante 01 · Arquitectura. Genera cliente/target/Cliente.jar -->
+<!-- El cliente NO depende de servidor: no puede tocar la BD, todo va por el protocolo. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>chat</groupId>
+        <artifactId>chat-cliente-servidor</artifactId>
+        <version>1.0</version>
+    </parent>
+    <artifactId>cliente</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>chat</groupId>
+            <artifactId>comun</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>Cliente</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <configuration>
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>chat.cliente.app.ClienteMain</mainClass>
+                        </transformer>
+                    </transformers>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
