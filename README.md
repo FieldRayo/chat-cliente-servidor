@@ -261,9 +261,98 @@ Ningún mensaje viaja directo de un cliente a otro: **todo pasa por el servidor*
 
 ## 🤝 Cómo contribuir
 
-1. Crea tu rama: `git checkout -b feature/<tu-parte>`
-2. Usa el **protocolo** del integrante 1 y los **DAOs** del integrante 2. No inventes mensajes de red ni escribas SQL suelto.
-3. Abre un Pull Request a `main`.
-4. Cuando termines una tarea, marca `[x]` en este README. Al subirlo a `main`, GitHub Actions recalcula las barras.
-   - Si quieres verlo antes, corre `python3 scripts/progreso.py`.
-5. Tu parte del documento va en el Google Doc del equipo (pide el enlace en el grupo).
+> [!WARNING]
+> **Nunca subas cambios directo a `main`.** Todo entra por Pull Request (PR). `main` siempre tiene que compilar y correr, porque es lo que se entrega.
+
+### 🧰 Paso 0: Preparación (solo la primera vez)
+
+1. **Pide acceso al repo.** Pasa tu usuario de GitHub al dueño del repo para que te agregue como colaborador. Te llega una invitación por correo y tienes que **aceptarla**.
+2. **Instala:**
+   - [Git](https://git-scm.com/downloads)
+   - [JDK 17](https://adoptium.net/) o una versión más nueva
+   - El IDE que quieras (NetBeans, IntelliJ o VS Code)
+3. **Configura tu nombre** para que tus commits salgan a tu nombre. Esto cuenta en la coevaluación:
+   ```bash
+   git config --global user.name "Tu Nombre"
+   git config --global user.email "el-correo-de-tu-github@ejemplo.com"
+   ```
+4. **Clona el repo:**
+   ```bash
+   git clone https://github.com/FieldRayo/chat-cliente-servidor.git
+   cd chat-cliente-servidor
+   ```
+5. **Pon tu nombre** en tu encabezado de [Tareas](#-tareas-por-integrante) (por ejemplo `### 05 · Registro — Juan Pérez`). Súbelo en tu primer PR.
+
+### 🔁 El flujo: cada vez que trabajes en tu parte
+
+**1. Trae lo más nuevo de `main`** antes de empezar:
+```bash
+git checkout main
+git pull
+```
+
+**2. Crea tu rama**, o vuelve a ella si ya la tienes. El nombre de la rama es `<tu número>-<tu tema>`:
+```bash
+git checkout -b 05-registro      # la primera vez
+git checkout 05-registro         # las siguientes veces
+git merge main                   # trae a tu rama lo que otros ya integraron
+```
+
+| Rama | Rama | Rama |
+|---|---|---|
+| `01-arquitectura` | `05-registro` | `09-amistades` |
+| `02-base-datos` | `06-login` | `10-chat-amigos` |
+| `03-servidor` | `07-recuperar-cuenta` | `11-grupos` |
+| `04-ventana-servidor` | `08-ventana-usuarios` | |
+
+**3. Programa tu parte.** Reglas:
+- Toca solo **tus archivos**. Si necesitas cambiar algo de otro, avísale primero.
+- Para enviar o recibir datos usa el **protocolo** (`Paquete`) del integrante 1. No inventes tu propio formato.
+- Para la BD usa los **DAOs** del integrante 2. No escribas SQL en tu ventana.
+- Antes de subir, comprueba que **compila y corre**.
+
+**4. Guarda tu avance (commit).** Haz commits pequeños y seguido, con un mensaje que diga qué hiciste:
+```bash
+git add .
+git commit -m "Registro: validar que el usuario no exista"
+```
+
+**5. Súbelo a GitHub (push):**
+```bash
+git push -u origin 05-registro   # la primera vez
+git push                         # las siguientes veces
+```
+
+**6. Abre el Pull Request.** Cuando una tarea esté lista:
+1. Entra al repo en GitHub. Va a salir un botón amarillo **"Compare & pull request"**. Dale clic.
+2. Revisa que diga **base: `main`** ← **compare: `tu-rama`**.
+3. **Título:** `[05] Registro: formulario y validaciones`
+4. **Descripción:** qué hiciste, cómo probarlo y capturas de pantalla si tiene ventana.
+5. **En el mismo PR**, marca con `[x]` en el README las tareas que terminaste.
+6. Pon como *Reviewer* al **integrante 1**.
+
+**7. Revisión y merge.** El integrante 1 lo prueba:
+- ✅ Si funciona, hace el merge. Las barras de progreso se actualizan solas.
+- 🔧 Si pide cambios, corrígelos en **la misma rama**, haz commit y push. El PR se actualiza solo, no abras otro.
+
+**8. Repite** desde el paso 1 con tu siguiente tarea.
+
+### 🆘 Problemas comunes
+
+| Situación | Qué hacer |
+|---|---|
+| `git push` te pide usuario y contraseña | GitHub ya no acepta tu contraseña. Usa un [token](https://github.com/settings/tokens) como contraseña o inicia sesión con [GitHub CLI](https://cli.github.com/) (`gh auth login`). |
+| `CONFLICT` al hacer `git merge main` | Abre los archivos marcados. Busca los `<<<<<<<` y `>>>>>>>`, deja la versión correcta y borra las marcas. Luego `git add .` y `git commit`. Si no sabes cuál dejar, pregunta al dueño de ese código. |
+| Hiciste cambios en `main` por error | Antes de hacer commit, corre `git checkout -b <tu-rama>`. Tus cambios se van a la rama nueva. |
+| Tu parte depende de otra que no está lista | Usa datos de prueba en tu ventana y avisa en el grupo. No te quedes esperando. |
+| No sabes algo | Pregunta en el grupo. Es mejor preguntar que romper `main`. |
+
+### 📄 Tu parte de la documentación
+
+No va en el repo, va en el **Google Doc del equipo** (pide el enlace en el grupo). Escribe en **tu sección**, que tiene tu número:
+- Caso de uso y diagrama de secuencia de tu acción
+- Las clases que hiciste, para que el integrante 1 arme el diagrama de clases
+- Si tienes ventana: la sección "¿Cómo se usa?", con capturas
+- Tu conclusión
+
+Cuando la termines, marca tus casillas 📄 en el README con un PR, igual que el código.
