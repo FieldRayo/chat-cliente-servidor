@@ -24,7 +24,7 @@
 > - Hay **una sola oportunidad** de entrega.
 > - Mientras califican a un equipo, el otro no está presente.
 >
-> 📝 **Documentación, Parte 1:** [Google Doc del equipo](https://docs.google.com/document/d/1jrqyue062hBdZg8UxoYzg9ZF91PVpjQCReckpmSkTxU/edit?tab=t.0)
+> 📝 **Documentación:** [Parte 1, técnica](https://docs.google.com/document/d/1jrqyue062hBdZg8UxoYzg9ZF91PVpjQCReckpmSkTxU/edit?tab=t.0) · [Parte 2, manual de usuario](https://docs.google.com/document/d/1z9OzryCyVB0iSMNRN0eGJvV00Gp6TCn5K5AyRN0jGhs/edit?tab=t.0)
 
 ## 📊 Progreso
 
@@ -76,7 +76,7 @@
 - Diagrama de la base de datos
 - Conclusión de cada integrante
 
-**Parte 2: Punto de vista del cliente**
+**Parte 2: Punto de vista del cliente** ([📝 se escribe aquí](https://docs.google.com/document/d/1z9OzryCyVB0iSMNRN0eGJvV00Gp6TCn5K5AyRN0jGhs/edit?tab=t.0))
 - Portada e índice
 - Descripción del sistema como producto
 - Requisitos mínimos
@@ -419,10 +419,12 @@ git push                         # las siguientes veces
 
 ### 📄 Tu parte de la documentación
 
-No va en el repo. La **Parte 1 (documentación técnica)** se escribe en este **[Google Doc](https://docs.google.com/document/d/1jrqyue062hBdZg8UxoYzg9ZF91PVpjQCReckpmSkTxU/edit?tab=t.0)**. Escribe en **tu sección**, que tiene tu número:
+No va en el repo. Se escribe en dos Google Docs:
+- 📘 **[Parte 1: Documentación técnica](https://docs.google.com/document/d/1jrqyue062hBdZg8UxoYzg9ZF91PVpjQCReckpmSkTxU/edit?tab=t.0)**: caso de uso, diagrama de secuencia, clases y conclusión.
+- 📗 **[Parte 2: Manual de usuario](https://docs.google.com/document/d/1z9OzryCyVB0iSMNRN0eGJvV00Gp6TCn5K5AyRN0jGhs/edit?tab=t.0)**: la sección "¿Cómo se usa?" de tu ventana. Escribe en **tu sección**, que tiene tu número:
 - Caso de uso y diagrama de secuencia de tu acción
 - Las clases que hiciste, para que el integrante 1 arme el diagrama de clases
-- Si tienes ventana: la sección "¿Cómo se usa?", con capturas
+- Si tienes ventana: la sección "¿Cómo se usa?" con capturas (en la **Parte 2**)
 - Tu conclusión
 
 Cuando la termines, marca tus casillas 📄 en el README con un PR, igual que el código.
