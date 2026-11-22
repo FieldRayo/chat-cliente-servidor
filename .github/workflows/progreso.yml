@@ -1,0 +1,26 @@
+name: Progreso
+
+# Cada vez que alguien marca casillas en el README y sube a main, se recalculan las barras.
+on:
+  push:
+    branches: [main]
+    paths: [README.md, scripts/progreso.py]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  progreso:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/progreso.py --test
+      - run: python3 scripts/progreso.py
+      - name: Commit si cambió
+        run: |
+          git diff --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: actualizar progreso"
+          git push
