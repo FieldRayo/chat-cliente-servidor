@@ -41,8 +41,8 @@
 | Área | Responsable | 💻 Código | 📄 Docs | Total |
 |---|---|---|---|---|
 | 🎯 Hitos | Todo el equipo | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 00 · Documentación general | El de 01 · Arquitectura | — | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 01 · Arquitectura e integración | _sin asignar_ | `██░░░░░░░░` 17% | `░░░░░░░░░░` 0% | `█░░░░░░░░░` 11% |
+| 00 · Documentación general | Jesus Emir Ayala Rayo | — | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
+| 01 · Arquitectura e integración | Jesus Emir Ayala Rayo | `██░░░░░░░░` 17% | `░░░░░░░░░░` 0% | `█░░░░░░░░░` 11% |
 | 02 · Base de datos | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 03 · Núcleo del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 04 · Ventana del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
@@ -309,7 +309,7 @@ flowchart LR
 
 </details>
 
-### 00 · Documentación general — El de 01 · Arquitectura
+### 00 · Documentación general — Jesus Emir Ayala Rayo
 
 > 🎯 **Objetivo:** armar las partes del documento que no son de un solo integrante y unir todo en los dos PDF.
 >
@@ -357,7 +357,7 @@ flowchart LR
 
 </details>
 
-### 01 · Arquitectura e integración —
+### 01 · Arquitectura e integración — Jesus Emir Ayala Rayo
 
 > 🎯 **Objetivo:** definir **cómo hablan** el cliente y el servidor, y que todas las partes se unan en dos `.jar` que funcionen.
 >
