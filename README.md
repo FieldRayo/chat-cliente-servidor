@@ -11,7 +11,7 @@
 ![Equipo](https://img.shields.io/badge/equipo-11%20integrantes-blue)
 ![Progreso](https://img.shields.io/badge/progreso-1%25-red)
 
-[Progreso](#-progreso) · [Evaluación](#-evaluación) · [Arquitectura](#️-arquitectura) · [Funcionalidad](#-funcionalidad) · [Estructura](#️-estructura-del-proyecto) · [Tareas](#-tareas-por-integrante) · [Cómo contribuir](#-cómo-contribuir)
+[Progreso](#-progreso) · [Evaluación](#-evaluación) · [Arquitectura](#️-arquitectura) · [Funcionalidad](#-funcionalidad) · [Estructura](#️-estructura-del-proyecto) · [Piezas clave](#-piezas-clave) · [Orden](#️-orden-de-desarrollo) · [Tareas](#-tareas-por-integrante) · [Cómo contribuir](#-cómo-contribuir)
 
 </div>
 
@@ -41,7 +41,7 @@
 | Área | Responsable | 💻 Código | 📄 Docs | Total |
 |---|---|---|---|---|
 | 🎯 Hitos | Todo el equipo | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 00 · Documentación general | Integrante 1 | — | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
+| 00 · Documentación general | El de 01 · Arquitectura | — | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 01 · Arquitectura e integración | _sin asignar_ | `██░░░░░░░░` 17% | `░░░░░░░░░░` 0% | `█░░░░░░░░░` 11% |
 | 02 · Base de datos | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 03 · Núcleo del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
@@ -172,11 +172,41 @@ chat-cliente-servidor/
 
 > `…` = `src/main/java/chat/servidor` o `src/main/java/chat/cliente`, según el módulo.
 
-**Lo que necesitas de otros, se lo pides a su dueño, no lo editas tú:**
-- ¿Un **tipo de mensaje** nuevo (`Tipo`)? → 01
-- ¿Que el servidor **mande tus paquetes** a tu servicio (`Despachador`)? → 03
-- ¿Una **tabla, columna o consulta** nueva (DAO)? → 02
-- ¿Que **tu ventana** se abra desde la ventana principal? → 01
+### 🧱 Piezas clave
+
+Son las piezas que **todos usan**. Cada una tiene un área dueña. Si necesitas algo nuevo de una pieza (un tipo de mensaje, una tabla, que tu ventana aparezca en el menú…), **se lo pides al área dueña**. No la editas tú.
+
+| Pieza | Qué es, en palabras simples | La hace | La usan |
+|---|---|---|---|
+| `Paquete` | El **sobre** que viaja por la red. Todo (un login, un mensaje, crear un grupo) se envía dentro de un `Paquete` con `tipo`, `de`, `para` y `datos`. | **01 · Arquitectura** | Todos |
+| `Tipo` | Lo que **dice el sobre por fuera**: qué clase de mensaje es (`LOGIN`, `MSG_AMIGO`, `GRUPO_CREAR`…). Con eso el servidor sabe qué hacer. | **01 · Arquitectura** | Todos |
+| `Conexion` | El **teléfono** del cliente. Envía paquetes al servidor y avisa a tu ventana cuando llega uno de su tipo. | **01 · Arquitectura** | Todas las ventanas |
+| `VentanaPrincipal` | El **menú** que aparece al iniciar sesión, desde donde se abren las demás ventanas. | **01 · Arquitectura** | Login y todas las ventanas |
+| Modelos (`Usuario`, `Mensaje`, `Grupo`…) | Clases que solo guardan datos y viajan dentro del `Paquete`. | **02 · Base de datos** | Todos |
+| DAOs (`UsuarioDAO`, `GrupoDAO`…) | La **única puerta a la base de datos**. Son métodos como `UsuarioDAO.existe("ana")` que ya traen el SQL adentro. | **02 · Base de datos** | Los servicios del servidor |
+| `Sesiones` | La **lista de quién está conectado**. `Sesiones.enviarA("luis", paquete)` le entrega algo a Luis. | **03 · Servidor** | Los servicios del servidor |
+| `Despachador` | El **cartero** del servidor. Lee el `Tipo` de cada paquete y lo entrega al servicio correcto. | **03 · Servidor** | El servidor (conectar tu servicio se lo pides a 03) |
+| Servicios (`LoginServicio`, `GruposServicio`…) | La **lógica de tu función** en el servidor. Recibe tu paquete, valida, usa los DAOs y responde. | Cada área, de la 05 a la 11 | El `Despachador` |
+| `Bitacora` | La **libreta** del servidor. Anota todo lo que pasa y lo muestra en la ventana del servidor. | **04 · Ventana del servidor** | El `Despachador` |
+| `Notificaciones` | La **ventana de avisos**. Cualquiera la llama con `Notificaciones.mostrar(...)`. | **09 · Amistades** | Chat de amigos y Grupos |
+
+<details>
+<summary><b>📦 Ejemplo: así viaja un mensaje de Ana a su amigo Luis</b></summary>
+
+```
+Cliente de Ana                         Servidor                                  Cliente de Luis
+──────────────                         ────────                                  ───────────────
+Paquete(tipo = MSG_AMIGO,    ──────►   Despachador lee "MSG_AMIGO"
+        de   = "ana",                  → lo entrega a ChatAmigosServicio
+        para = "luis",                 → lo guarda con MensajeAmigoDAO
+        datos= "¡Hola!")               → lo anota en la Bitacora
+                                       → Sesiones.enviarA("luis")    ──────►    su Conexion lo recibe
+                                                                                y su ChatAmigo lo muestra
+```
+
+Un login usa **el mismo sobre**, solo cambia el tipo: `Paquete(tipo = LOGIN, de = "ana", datos = "contraseña")`. El servidor responde con un `Paquete` de tipo `OK` o `ERROR`.
+
+</details>
 
 ### ▶️ Compilar y correr
 
@@ -186,13 +216,39 @@ java -jar servidor/target/Servidor.jar    # en la computadora servidor
 java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 ```
 
-> Los `.jar` se van a poder ejecutar cuando existan `ServidorMain` (integrante 03) y `ClienteMain` (integrante 01).
+> Los `.jar` se van a poder ejecutar cuando existan `ServidorMain` (lo hace **03 · Servidor**) y `ClienteMain` (lo hace **01 · Arquitectura**).
+
+## 🗓️ Orden de desarrollo
+
+Cada fase **necesita la anterior**. No hay que esperar con los brazos cruzados: desde el día 1 **todos** pueden diseñar su ventana en Swing con **datos falsos** (sin red) y escribir su caso de uso. Solo la conexión real espera a la fase que le toca.
+
+```mermaid
+flowchart LR
+    F1["<b>Fase 1</b><br/>Cimientos<br/>Arquitectura · Base de datos · Servidor"] --> F2["<b>Fase 2</b><br/>Acceso<br/>Registro · Login · Bitácora · Menú"]
+    F2 --> F3["<b>Fase 3</b><br/>Primer chat ⭐<br/>Usuarios · Recuperar acceso"]
+    F3 --> F4["<b>Fase 4</b><br/>Amigos<br/>Amistades · Chat de amigos"]
+    F4 --> F5["<b>Fase 5</b><br/>Grupos y cierre<br/>Grupos · Eliminar cuenta · Ventana servidor"]
+    F5 --> F6["<b>Fase 6</b><br/>Entrega<br/>todos"]
+```
+
+| Fase | Quién programa | Qué se construye | ✅ Se termina cuando… |
+|---|---|---|---|
+| **1 · Cimientos** | **01 · Arquitectura**, **02 · Base de datos**, **03 · Servidor** | `Paquete`, `Tipo` y `Conexion`. La base de datos y sus DAOs. El servidor que acepta clientes (`Sesiones`, `Despachador`). | **Dos computadoras** se mandan un `Paquete` a través del servidor. |
+| **2 · Acceso** | **05 · Registro**, **06 · Login**, **04 · Ventana del servidor**, **01 · Arquitectura** | Registro, login con bloqueo, una bitácora básica, `ClienteMain` y `VentanaPrincipal`. | Un usuario se registra, entra y aparece en la bitácora. |
+| **3 · Primer chat ⭐** | **08 · Usuarios**, **07 · Cuenta** | La ventana 1 con conectados y desconectados y el chat temporal. Recuperar acceso. | **Dos usuarios en dos computadoras se mandan un mensaje.** Con esto ya **califica el programa**. |
+| **4 · Amigos** | **09 · Amistades**, **10 · Chat de amigos** | Solicitudes, notificaciones y el chat de amigos con mensajes a desconectados. | A le escribe a B estando B desconectado, y B lo recibe al entrar. |
+| **5 · Grupos y cierre** | **11 · Grupos**, **07 · Cuenta**, **04 · Ventana del servidor** | Grupos con la regla de 3, eliminar cuenta en cascada y las pestañas completas del servidor. | Se cumplen todas las reglas de la sección [Funcionalidad](#-funcionalidad). |
+| **6 · Entrega** | Todos | Integración, pruebas en la red del salón, PDFs y ensayo. | Todo el [🎯 Hitos](#-tareas-por-integrante) está marcado. |
+
+> [!NOTE]
+> **¿Por qué en este orden?** Nadie puede enviar nada sin el `Paquete` (fase 1). Nadie chatea sin haber iniciado sesión (fase 2). El chat de amigos necesita amistades (fase 4). Los grupos se hacen con amigos, y eliminar la cuenta tiene que borrar los grupos (fase 5).
+> Lo más importante es la fase 3: **lleguen a ella cuanto antes**, porque es el mínimo para calificar.
 
 ## ✅ Tareas por integrante
 
 > **Busca tu número**, abre tu **📖 Guía detallada** y ahí está todo lo que te toca.
 > Pon tu nombre después del `—` en tu encabezado y marca `[x]` cuando termines una tarea.
-> Las tareas `💻` son de código y las `📄` de documentación. Detalle en [`TAREAS.md`](TAREAS.md).
+> Las tareas `💻` son de código y las `📄` de documentación.
 
 ### 📝 Cómo hacer tu documentación (aplica a todos)
 
@@ -202,7 +258,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 |---|---|---|
 | **Caso de uso** | Parte 1 | Nombre · Actor · Precondición · Flujo principal (pasos numerados) · Flujos alternos · Postcondición, y el **diagrama de caso de uso** |
 | **Diagrama de secuencia** | Parte 1 | **Una sola acción**. Participantes de izquierda a derecha: Usuario → Ventana → `Conexion` → `ManejadorCliente` → `Despachador` → Servicio → DAO → BD, con las respuestas en línea punteada |
-| **Tus clases** | Al integrante 00/01 | Nombre, atributos y métodos de cada clase tuya, y con qué clases se relaciona |
+| **Tus clases** | Se las das a **01 · Arquitectura** | Nombre, atributos y métodos de cada clase tuya, y con qué clases se relaciona |
 | **¿Cómo se usa?** | Parte 2 | Paso a paso **con capturas**, escrito para alguien que no programa. Incluye los mensajes de error que puede ver |
 | **Conclusión** | Parte 1 | Personal: qué hiciste, qué aprendiste y qué fue lo más difícil |
 
@@ -253,7 +309,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 
 </details>
 
-### 00 · Documentación general — Integrante 1
+### 00 · Documentación general — El de 01 · Arquitectura
 
 > 🎯 **Objetivo:** armar las partes del documento que no son de un solo integrante y unir todo en los dos PDF.
 >
@@ -290,7 +346,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
   - Red local
   - Unos 2 GB de RAM
   - El puerto del servidor abierto en el firewall
-- **Proceso de instalación** (en equipo con 02):
+- **Proceso de instalación** (junto con **02 · Base de datos**):
   1. Instalar Java.
   2. Copiar `Servidor.jar` o `Cliente.jar`.
   3. Abrirlo con doble clic o con `java -jar`.
@@ -307,7 +363,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 >
 > 📁 **Tus carpetas:** los 4 `pom.xml`, `comun/…/protocolo/`, `cliente/…/app/`
 >
-> 🔗 **Te necesitan:** **todos**, así que tu protocolo va primero, en la semana 1 · **Dependes de:** nadie.
+> 🔗 **Te necesitan:** **todos**, así que tu `Paquete` va primero, en la **fase 1** · **Dependes de:** nadie.
 
 - [x] 💻 Estructura del proyecto (`comun`, `servidor`, `cliente`)
 - [ ] 💻 Protocolo: clase `Paquete` y tipos de mensaje
@@ -337,8 +393,8 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 4. **`ClienteMain`**:
    1. Pide la IP y el puerto del servidor. Recuerda los últimos con `java.util.prefs.Preferences`.
    2. Se conecta.
-   3. Abre el login (06).
-5. **`VentanaPrincipal`**: se abre después del login. Tiene botones para abrir la Ventana 1 (08), la 2 (10), la 3 (11), Notificaciones (09) y Eliminar cuenta (07), además de **Cerrar sesión**.
+   3. Abre el login (área **06 · Login**).
+5. **`VentanaPrincipal`**: se abre después del login. Tiene botones para abrir la Ventana 1 (área **08 · Usuarios**), la 2 (área **10 · Chat de amigos**), la 3 (área **11 · Grupos**), Notificaciones (área **09 · Amistades**) y Eliminar cuenta (área **07 · Cuenta**), además de **Cerrar sesión**.
 6. **Integración:** revisa y haz el merge de los PR de todos. Genera los jars con `mvn package` y prueba en dos computadoras.
 
 **⚠️ Reglas que debe cumplir tu parte**
@@ -355,7 +411,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
   - **Precondición:** el servidor está encendido.
   - **Flujo principal:** el usuario abre el cliente, escribe la IP, se conecta y aparece el login.
   - **Flujos alternos:** IP incorrecta o servidor apagado: muestra un error y deja reintentar.
-- **Diagrama de secuencia:** Usuario → `ClienteMain` → `Conexion` → `ServerSocket` (03) → `ManejadorCliente` (03) → respuesta → `VentanaLogin` (06).
+- **Diagrama de secuencia:** Usuario → `ClienteMain` → `Conexion` → `ServerSocket` → `ManejadorCliente` → respuesta → `VentanaLogin`.
 
 </details>
 
@@ -365,7 +421,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 >
 > 📁 **Tus carpetas:** `servidor/…/bd/`, `servidor/src/main/resources/schema.sql`, `comun/…/modelo/`
 >
-> 🔗 **Te necesitan:** 03 a 11, todos usan tus DAOs, así que vas en la semana 1 · **Dependes de:** nadie.
+> 🔗 **Te necesitan:** **todas las demás áreas** usan tus DAOs, así que vas en la **fase 1** · **Dependes de:** nadie.
 
 - [ ] 💻 Esquema SQLite (usuarios, amistades, mensajes, grupos, miembros, bitácora)
 - [ ] 💻 DAOs para que nadie escriba SQL suelto
@@ -403,7 +459,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 
 **⚠️ Reglas que debe cumplir tu parte**
 - Si el dueño de un grupo elimina su cuenta, su grupo se elimina.
-- Si se va un miembro, el servicio de 11 revisa si quedan menos de 3. Ofrécele `contarMiembros(grupo)`.
+- Si se va un miembro, el servicio de **11 · Grupos** revisa si quedan menos de 3. Ofrécele `contarMiembros(grupo)`.
 - El chat temporal (ventana 1) **no se guarda** como historial. Solo queda el registro en la bitácora.
 
 **🧪 Está listo cuando…**
@@ -416,7 +472,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
   - **Actor:** usuario.
   - **Flujo principal:** confirma con su contraseña y el sistema borra en cascada amistades, chats y grupos.
   - **Flujo alterno:** contraseña incorrecta.
-- **Diagrama de secuencia:** `VentanaCuenta` (07) → `Conexion` → `Despachador` → `CuentaServicio` → `UsuarioDAO.eliminar` → SQLite (cascada).
+- **Diagrama de secuencia:** `VentanaCuenta` → `Conexion` → `Despachador` → `CuentaServicio` → `UsuarioDAO.eliminar` → SQLite (cascada).
 - **Parte 2:** apoya a 00 con el proceso de instalación. `chat.db` se crea sola junto a `Servidor.jar`.
 
 </details>
@@ -427,7 +483,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 >
 > 📁 **Tus carpetas:** `servidor/…/nucleo/`
 >
-> 🔗 **Te necesitan:** 04 a 11 · **Dependes de:** 01 (protocolo) y 02 (BD).
+> 🔗 **Te necesitan:** **todas las áreas que vienen después** · **Dependes de:** **01 · Arquitectura** (protocolo) y **02 · Base de datos** (BD).
 
 - [ ] 💻 `ServerSocket` con pool de hilos (para que no se sature)
 - [ ] 💻 Registro de clientes conectados
@@ -443,8 +499,8 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 
 **💻 Código**
 1. **`ServidorMain`**:
-   1. Inicializa la BD (02).
-   2. Abre la ventana del servidor (04).
+   1. Inicializa la BD (área **02 · Base de datos**).
+   2. Abre la ventana del servidor (área **04 · Ventana del servidor**).
    3. Abre un `ServerSocket` en el puerto `5000`.
 2. **Pool de hilos:** usa `Executors.newFixedThreadPool(N)` para no crear hilos sin límite. **Esto evita que el servidor se sature.** Cada cliente aceptado se atiende con un `ManejadorCliente`.
 3. **`ManejadorCliente`**:
@@ -458,9 +514,9 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
    - `difundir(paquete)`
 5. **`Despachador`**:
    - Según el `Tipo` del paquete, llama al servicio de cada módulo (`RegistroServicio`, `LoginServicio`...).
-   - Registra **cada paquete en la bitácora** (04). Así el servidor "ve todo".
+   - Registra **cada paquete en la bitácora** (área **04 · Ventana del servidor**). Así el servidor "ve todo".
    - Los demás te piden que conectes su servicio. Es una línea por servicio.
-6. Cuando alguien entra o sale, difunde `USUARIO_CONECTADO` o `USUARIO_DESCONECTADO`. Con eso 08 y 10 actualizan sus listas en tiempo real.
+6. Cuando alguien entra o sale, difunde `USUARIO_CONECTADO` o `USUARIO_DESCONECTADO`. Con eso **08 · Usuarios** y **10 · Chat de amigos** actualizan sus listas en tiempo real.
 
 **⚠️ Reglas que debe cumplir tu parte**
 - Escribe en el `ObjectOutputStream` de cada cliente con `synchronized`. Si dos hilos escriben a la vez, se corrompe el flujo.
@@ -487,7 +543,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 >
 > 📁 **Tus carpetas:** `servidor/…/gui/`
 >
-> 🔗 **Te necesitan:** 03, que registra cada paquete en tu bitácora · **Dependes de:** 02 (`BitacoraDAO`) y 03.
+> 🔗 **Te necesitan:** **03 · Servidor**, que registra cada paquete en tu bitácora · **Dependes de:** **02 · Base de datos** (`BitacoraDAO`) y **03 · Servidor**.
 
 - [ ] 💻 Bitácora en tiempo real
 - [ ] 💻 Búsqueda y filtro en el historial
@@ -534,7 +590,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 >
 > 📁 **Tus carpetas:** `servidor/…/registro/` + `cliente/…/registro/`
 >
-> 🔗 **Te necesitan:** 06 (manda al registro tras los fallos) y 07 (usa la pregunta de seguridad) · **Dependes de:** 01, 02 y 03.
+> 🔗 **Te necesitan:** **06 · Login** (manda al registro tras los fallos) y **07 · Cuenta** (usa la pregunta de seguridad) · **Dependes de:** **01 · Arquitectura**, **02 · Base de datos** y **03 · Servidor**.
 
 - [ ] 💻 Formulario de registro
 - [ ] 💻 Validaciones (usuario único, contraseña)
@@ -551,7 +607,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 **💻 Código**
 1. **`VentanaRegistro`** (cliente):
    - Campos: usuario, contraseña, confirmar contraseña, pregunta de seguridad (un combo con opciones) y respuesta.
-   - Se puede abrir desde el login y también **sola**, cuando 06 manda al usuario a registrarse.
+   - Se puede abrir desde el login y también **sola**, cuando **06 · Login** manda al usuario a registrarse.
 2. **Validaciones en el cliente:** ningún campo vacío, las contraseñas coinciden y la contraseña tiene al menos 6 caracteres.
 3. **`RegistroServicio`** (servidor):
    - Valida de nuevo: **nunca confíes en el cliente**.
@@ -583,7 +639,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 >
 > 📁 **Tus carpetas:** `servidor/…/login/` + `cliente/…/login/`
 >
-> 🔗 **Te necesitan:** 08, 09, 10 y 11, que solo trabajan con sesión iniciada · **Dependes de:** 01, 02, 03 y 05.
+> 🔗 **Te necesitan:** **08 · Usuarios**, **09 · Amistades**, **10 · Chat de amigos** y **11 · Grupos**, que solo trabajan con sesión iniciada · **Dependes de:** **01 · Arquitectura**, **02 · Base de datos**, **03 · Servidor** y **05 · Registro**.
 
 - [ ] 💻 Ventana de inicio de sesión
 - [ ] 💻 Validación contra el servidor
@@ -601,14 +657,14 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 **💻 Código**
 1. **`VentanaLogin`** (cliente):
    - Campos de usuario y contraseña.
-   - Botones *Entrar*, *Registrarme* (abre 05) y *¿Olvidaste tu acceso?* (abre 07).
+   - Botones *Entrar*, *Registrarme* (abre **05 · Registro**) y *¿Olvidaste tu acceso?* (abre **07 · Cuenta**).
 2. **`LoginServicio`** (servidor), compara el hash:
-   - ✅ **Correcto:** pone `intentos = 0`, inicia la sesión (`Sesiones.iniciar`) y difunde `USUARIO_CONECTADO`. El cliente abre la `VentanaPrincipal` (01).
-   - ❌ **Contraseña incorrecta:** suma 1 a `intentos`. **Al llegar a 3, bloquea al usuario** y le dice que recupere su acceso (07).
-   - ❓ **El usuario no existe:** después de 3 intentos, **lo manda al formulario de registro** (05).
+   - ✅ **Correcto:** pone `intentos = 0`, inicia la sesión (`Sesiones.iniciar`) y difunde `USUARIO_CONECTADO`. El cliente abre la `VentanaPrincipal` (área **01 · Arquitectura**).
+   - ❌ **Contraseña incorrecta:** suma 1 a `intentos`. **Al llegar a 3, bloquea al usuario** y le dice que recupere su acceso (área **07 · Cuenta**).
+   - ❓ **El usuario no existe:** después de 3 intentos, **lo manda al formulario de registro** (área **05 · Registro**).
    - 🔒 **Usuario bloqueado:** no lo deja entrar aunque la contraseña sea correcta, hasta que recupere su acceso.
    - 👥 **Ya tiene una sesión abierta:** se rechaza, porque no se permiten dos sesiones con el mismo usuario.
-3. Al entrar, el servidor le envía lo que tiene pendiente: solicitudes de amistad (09), mensajes de amigos (10) e invitaciones a grupos (11).
+3. Al entrar, el servidor le envía lo que tiene pendiente: solicitudes de amistad (área **09 · Amistades**), mensajes de amigos (área **10 · Chat de amigos**) e invitaciones a grupos (área **11 · Grupos**).
 
 **⚠️ Reglas que debe cumplir tu parte**
 - "Si intento acceder en tres ocasiones y las tres fallan, bloqueas el usuario o te imaginas que no está registrado y lo envías al formulario de registro." Cubre los dos casos.
@@ -633,7 +689,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 >
 > 📁 **Tus carpetas:** `servidor/…/cuenta/` + `cliente/…/cuenta/`
 >
-> 🔗 **Te necesitan:** 06, que manda aquí a los bloqueados · **Dependes de:** 02 (cascada), 05 (pregunta de seguridad) y 11 (regla de los 3).
+> 🔗 **Te necesitan:** **06 · Login**, que manda aquí a los bloqueados · **Dependes de:** **02 · Base de datos** (cascada), **05 · Registro** (pregunta de seguridad) y **11 · Grupos** (regla de los 3).
 
 - [ ] 💻 Ventana de recuperación con pregunta de seguridad
 - [ ] 💻 Restablecer contraseña y desbloquear
@@ -655,8 +711,8 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 3. **Eliminar mi cuenta** (desde la `VentanaPrincipal`):
    - Pide confirmación y la contraseña.
    - El servidor avisa a sus amigos.
-   - Borra la cuenta con `UsuarioDAO`; la cascada la hace 02.
-   - Revisa los grupos que quedan con menos de 3 y los elimina, coordinado con 11.
+   - Borra la cuenta con `UsuarioDAO`; la cascada la hace **02 · Base de datos**.
+   - Revisa los grupos que quedan con menos de 3 y los elimina, coordinado con **11 · Grupos**.
    - Cierra la sesión.
 
 **⚠️ Reglas que debe cumplir tu parte**
@@ -683,13 +739,13 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 >
 > 📁 **Tus carpetas:** `servidor/…/usuarios/` + `cliente/…/usuarios/`
 >
-> 🔗 **Te necesitan:** 09, porque desde aquí se envía la solicitud de amistad · **Dependes de:** 01, 03 y 06.
+> 🔗 **Te necesitan:** **09 · Amistades**, porque desde aquí se envía la solicitud de amistad · **Dependes de:** **01 · Arquitectura**, **03 · Servidor** y **06 · Login**.
 
 - [ ] 💻 Lista de conectados y desconectados en tiempo real
 - [ ] 💻 Chat temporal, solo con conectados
 - [ ] 💻 Borrar el historial cuando el otro cierra sesión
 - [ ] 💻 Cerrar ventana ≠ cerrar sesión
-- [ ] 💻 Botón "Agregar amigo" (se conecta con 09)
+- [ ] 💻 Botón "Agregar amigo" (usa lo de **09 · Amistades**)
 - [ ] 📄 Caso de uso: Enviar mensaje a un conectado
 - [ ] 📄 Diagrama de secuencia
 - [ ] 📄 Manual: Ventana de usuarios
@@ -710,7 +766,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 4. **Cerrar la ventana ≠ cerrar la sesión:**
    - La X solo oculta la ventana (`HIDE_ON_CLOSE`) y se vuelve a abrir desde la `VentanaPrincipal`.
    - El usuario sigue conectado y su conversación sigue ahí.
-5. Botón **"Agregar amigo"**: llama al método que te dé 09. Usas su clase, **no editas su carpeta**.
+5. Botón **"Agregar amigo"**: llama al método que te dé **09 · Amistades**. Usas su clase, **no editas su carpeta**.
 6. **`UsuariosServicio`** (servidor):
    - Responde la lista con el estado de cada usuario.
    - Reenvía `MSG_TEMPORAL` con `Sesiones.enviarA`. Solo queda el registro en la bitácora.
@@ -739,7 +795,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 >
 > 📁 **Tus carpetas:** `servidor/…/amistades/` + `cliente/…/amistades/`
 >
-> 🔗 **Te necesitan:** 08 (botón "Agregar amigo"), 10 (lista de amigos) y 11 (las notificaciones de grupo) · **Dependes de:** 01, 02, 03 y 06.
+> 🔗 **Te necesitan:** **08 · Usuarios** (botón "Agregar amigo"), **10 · Chat de amigos** (lista de amigos) y **11 · Grupos** (las notificaciones de grupo) · **Dependes de:** **01 · Arquitectura**, **02 · Base de datos**, **03 · Servidor** y **06 · Login**.
 
 - [ ] 💻 Enviar solicitud de amistad
 - [ ] 💻 Aceptar o rechazar solicitud
@@ -754,17 +810,17 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 <summary><b>📖 Guía detallada: qué tienes que hacer</b></summary>
 
 **💻 Código**
-1. **`Amistades`** (cliente): una clase con métodos públicos como `enviarSolicitud(usuario)`, que 08 llama desde su botón.
+1. **`Amistades`** (cliente): una clase con métodos públicos como `enviarSolicitud(usuario)`, que **08 · Usuarios** llama desde su botón.
 2. **`AmistadesServicio`** (servidor):
    - **Solicitud:** se guarda como `PENDIENTE`. Si el destinatario está conectado, le llega al momento; si no, **cuando se conecte**.
-   - **Aceptar:** pasa a `ACEPTADA` y avisa a los dos, así el amigo aparece en la ventana 2 (10) y **sigue** en la ventana 1.
+   - **Aceptar:** pasa a `ACEPTADA` y avisa a los dos, así el amigo aparece en la ventana 2 (área **10 · Chat de amigos**) y **sigue** en la ventana 1.
    - **Rechazar:** se borra la solicitud y se avisa a quien la envió.
-   - **Eliminar amigo:** se borra la amistad **y la conversación permanente** (con el DAO de 02) y se avisa al otro.
+   - **Eliminar amigo:** se borra la amistad **y la conversación permanente** (con el DAO de **02 · Base de datos**) y se avisa al otro.
    - Evita duplicados: no se puede enviar una solicitud si ya son amigos o si ya hay una pendiente.
 3. **`VentanaNotificaciones`** (cliente):
    - Una lista de avisos: solicitudes (con botones *Aceptar* y *Rechazar*), respuestas, invitaciones a grupo y mensajes nuevos con la ventana cerrada.
-   - Ofrece un método `Notificaciones.mostrar(...)` que 10 y 11 llaman para sus avisos.
-   - Muestra un contador o un parpadeo en la `VentanaPrincipal` cuando hay algo nuevo (pídeselo a 01).
+   - Ofrece un método `Notificaciones.mostrar(...)` que **10 · Chat de amigos** y **11 · Grupos** llaman para sus avisos.
+   - Muestra un contador o un parpadeo en la `VentanaPrincipal` cuando hay algo nuevo (pídeselo a **01 · Arquitectura**).
 
 **⚠️ Reglas que debe cumplir tu parte**
 - "Para seleccionar un amigo es en la ventana uno. Le llega una invitación y, si la acepta, se mueve a amigos, pero sigue en la primera lista."
@@ -790,13 +846,13 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 >
 > 📁 **Tus carpetas:** `servidor/…/chatamigos/` + `cliente/…/chatamigos/`
 >
-> 🔗 **Te necesitan:** 11, porque las invitaciones a grupo llegan por tu chat · **Dependes de:** 01, 02, 03 y 09.
+> 🔗 **Te necesitan:** **11 · Grupos**, porque las invitaciones a grupo llegan por tu chat · **Dependes de:** **01 · Arquitectura**, **02 · Base de datos**, **03 · Servidor** y **09 · Amistades**.
 
 - [ ] 💻 Lista de amigos con su estado
 - [ ] 💻 Chat persistente, separado del de la ventana 1
 - [ ] 💻 Mensajes a desconectados entregados al conectarse
 - [ ] 💻 Borrar la conversación al eliminar al amigo
-- [ ] 💻 Invitación a grupo dentro del chat (se conecta con 11)
+- [ ] 💻 Invitación a grupo dentro del chat (usa lo de **11 · Grupos**)
 - [ ] 📄 Caso de uso: Enviar mensaje a un amigo desconectado
 - [ ] 📄 Diagrama de secuencia
 - [ ] 📄 Manual: Chat de amigos
@@ -816,8 +872,8 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
    - Guarda cada mensaje en la BD.
    - Si el amigo está conectado, se lo entrega al momento. Si no, lo deja con `entregado = 0`.
    - Cuando el amigo inicia sesión, **le entrega los pendientes** y se marcan como entregados.
-4. **Invitación a grupo dentro del chat:** muestra el mensaje especial de 11 con botones *Aceptar* y *Rechazar*. El método de respuesta es de 11; tú solo lo pintas.
-5. Si llega un mensaje con la ventana cerrada, avisa con `Notificaciones.mostrar` (09).
+4. **Invitación a grupo dentro del chat:** muestra el mensaje especial de **11 · Grupos** con botones *Aceptar* y *Rechazar*. El método que responde es de Grupos; tú solo lo muestras.
+5. Si llega un mensaje con la ventana cerrada, avisa con `Notificaciones.mostrar` (área **09 · Amistades**).
 
 **⚠️ Reglas que debe cumplir tu parte**
 - "Puedo mandar mensaje sin importar que esté conectado o no, y cuando se conecte le llegará. Los mensajes de la ventana dos **siempre** se conservan."
@@ -844,7 +900,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 >
 > 📁 **Tus carpetas:** `servidor/…/grupos/` + `cliente/…/grupos/`
 >
-> 🔗 **Te necesitan:** 07, para los grupos que quedan con menos de 3 al eliminar una cuenta · **Dependes de:** 02, 03, 09 y 10.
+> 🔗 **Te necesitan:** **07 · Cuenta**, para los grupos que quedan con menos de 3 al eliminar una cuenta · **Dependes de:** **02 · Base de datos**, **03 · Servidor**, **09 · Amistades** y **10 · Chat de amigos**.
 
 - [ ] 💻 Crear grupo invitando al menos a 2 amigos
 - [ ] 💻 Aceptar o rechazar invitación
@@ -866,7 +922,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
    - El usuario escribe un nombre y elige **al menos 2 amigos**. Solo se puede invitar a amigos.
    - **El grupo se crea en ese momento:** el dueño queda `ACTIVO` y los invitados `PENDIENTE`.
 3. **Invitaciones:**
-   - Se envían **por el chat de amigos** (10) y como notificación (09).
+   - Se envían **por el chat de amigos** (área **10 · Chat de amigos**) y como notificación (área **09 · Amistades**).
    - Si el invitado acepta, queda `ACTIVO` y **ve todo el historial**.
    - Si rechaza, sale del grupo. Si quedan menos de 3, **el grupo se elimina**.
 4. **`ChatGrupo`**:
@@ -877,8 +933,8 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 6. **Salir del grupo:** cualquiera puede salir. Si quedan menos de 3, **se elimina el grupo con todo su historial**.
    - El equipo decide qué pasa si sale el dueño. Sugerencia: el grupo pasa al miembro más antiguo.
 7. **`GruposServicio`** (servidor): **todas** las reglas se validan aquí, no en el cliente.
-   - Cuenta los miembros con `contarMiembros` (02); los `PENDIENTE` cuentan.
-   - Tiene un método `revisarMinimo(grupo)` que 07 también llama.
+   - Cuenta los miembros con `contarMiembros` (área **02 · Base de datos**); los `PENDIENTE` cuentan.
+   - Tiene un método `revisarMinimo(grupo)` que **07 · Cuenta** también llama.
 
 **⚠️ Reglas que debe cumplir tu parte**
 - "Para que el grupo se pueda crear debe tener mínimo tres integrantes, incluyendo al dueño. Las invitaciones pendientes se toman como usuarios activos."
@@ -894,7 +950,7 @@ java -jar cliente/target/Cliente.jar      # en cada computadora cliente
   - **Actor:** dueño.
   - **Flujo principal:** escribe el nombre, elige 2 o más amigos y el grupo queda creado con las invitaciones enviadas.
   - **Flujos alternos:** menos de 2 amigos elegidos, un invitado rechaza (se revisa el mínimo) o un miembro sale.
-- **Diagrama de secuencia:** Dueño → `VentanaGrupos` → `Conexion` → `GruposServicio` → `GrupoDAO` → `Sesiones.enviarA(invitados)` → `ChatAmigo` (10) de cada invitado.
+- **Diagrama de secuencia:** Dueño → `VentanaGrupos` → `Conexion` → `GruposServicio` → `GrupoDAO` → `Sesiones.enviarA(invitados)` → `ChatAmigo` de cada invitado.
 - **Parte 2, "Grupos":** crear un grupo, invitar, aceptar, salir, opciones del dueño y la regla de los 3. Con capturas.
 
 </details>
@@ -948,8 +1004,8 @@ git merge main                   # trae a tu rama lo que otros ya integraron
 
 **3. Programa tu parte.** Reglas:
 - Toca solo **tus carpetas** (ver [Qué carpetas son de quién](#-qué-carpetas-son-de-quién)). Si necesitas algo de otra carpeta, pídeselo a su dueño.
-- Para enviar o recibir datos usa el **protocolo** (`Paquete`) del integrante 1. No inventes tu propio formato.
-- Para la BD usa los **DAOs** del integrante 2. No escribas SQL en tu ventana.
+- Para enviar o recibir datos mete todo en un **`Paquete`** con su `Tipo` (ver [🧱 Piezas clave](#-piezas-clave)). No inventes tu propio formato.
+- Para la base de datos usa los **DAOs** de **02 · Base de datos**. No escribas SQL en ningún otro lado.
 - Antes de subir, comprueba que **compila y corre**.
 
 **4. Guarda tu avance (commit).** Haz commits pequeños y seguido, con un mensaje que diga qué hiciste:
@@ -970,9 +1026,9 @@ git push                         # las siguientes veces
 3. **Título:** `[05] Registro: formulario y validaciones`
 4. **Descripción:** qué hiciste, cómo probarlo y capturas de pantalla si tiene ventana.
 5. **En el mismo PR**, marca con `[x]` en el README las tareas que terminaste.
-6. Pon como *Reviewer* al **integrante 1**.
+6. Pon como *Reviewer* al responsable de **01 · Arquitectura**.
 
-**7. Revisión y merge.** El integrante 1 lo prueba:
+**7. Revisión y merge.** El responsable de **01 · Arquitectura** lo prueba:
 - ✅ Si funciona, hace el merge. Las barras de progreso se actualizan solas.
 - 🔧 Si pide cambios, corrígelos en **la misma rama**, haz commit y push. El PR se actualiza solo, no abras otro.
 
@@ -994,7 +1050,7 @@ No va en el repo. Se escribe en dos Google Docs:
 - 📘 **[Parte 1: Documentación técnica](https://docs.google.com/document/d/1jrqyue062hBdZg8UxoYzg9ZF91PVpjQCReckpmSkTxU/edit?tab=t.0)**: caso de uso, diagrama de secuencia, clases y conclusión.
 - 📗 **[Parte 2: Manual de usuario](https://docs.google.com/document/d/1z9OzryCyVB0iSMNRN0eGJvV00Gp6TCn5K5AyRN0jGhs/edit?tab=t.0)**: la sección "¿Cómo se usa?" de tu ventana. Escribe en **tu sección**, que tiene tu número:
 - Caso de uso y diagrama de secuencia de tu acción
-- Las clases que hiciste, para que el integrante 1 arme el diagrama de clases
+- Las clases que hiciste, para que **01 · Arquitectura** arme el diagrama de clases
 - Si tienes ventana: la sección "¿Cómo se usa?" con capturas (en la **Parte 2**)
 - Tu conclusión
 
