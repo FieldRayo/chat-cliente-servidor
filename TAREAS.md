@@ -7,7 +7,7 @@ Entregables: `Servidor.jar` y `Cliente.jar`.
 > Reglas para todos
 > - Nadie inventa mensajes de red: todos usan el **protocolo** del integrante 1.
 > - Nadie toca la BD con SQL suelto: todos usan los **DAO** del integrante 2.
-> - Cada quien trabaja en su rama `feature/<su-parte>` y abre un PR a `main`.
+> - Cada quien trabaja en su rama (`05-registro`, etc.) y abre un PR a `main`. El flujo completo está en el README, en la sección "Cómo contribuir".
 > - Cada quien documenta **su parte** en el Google Doc (ver sección al final).
 
 ---
