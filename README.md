@@ -43,7 +43,7 @@
 | 🎯 Hitos | Todo el equipo | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 00 · Documentación general | Jesus Emir Ayala Rayo | — | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 01 · Arquitectura e integración | Jesus Emir Ayala Rayo | `███████░░░` 67% | `░░░░░░░░░░` 0% | `████░░░░░░` 44% |
-| 02 · Base de datos | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
+| 02 · Base de datos | Sergio Luis Soto Pulido | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 03 · Núcleo del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 04 · Ventana del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 05 · Registro | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
@@ -428,7 +428,7 @@ flowchart LR
 
 </details>
 
-### 02 · Base de datos —
+### 02 · Base de datos — Sergio Luis Soto Pulido
 
 > 🎯 **Objetivo:** guardar todo lo que debe sobrevivir y que **nadie más escriba SQL**.
 >
@@ -991,7 +991,11 @@ flowchart LR
    git clone https://github.com/FieldRayo/chat-cliente-servidor.git
    cd chat-cliente-servidor
    ```
-5. **Pon tu nombre** en tu encabezado de [Tareas](#-tareas-por-integrante) (por ejemplo `### 05 · Registro — Juan Pérez`). Súbelo en tu primer PR.
+5. **Activa el aviso de rama atrasada** (dentro de la carpeta del repo). Al hacer `git push` te avisa si te falta algo de `main`; no bloquea nada:
+   ```bash
+   git config core.hooksPath .githooks
+   ```
+6. **Pon tu nombre** en tu encabezado de [Tareas](#-tareas-por-integrante) (por ejemplo `### 05 · Registro — Juan Pérez`). Súbelo en tu primer PR.
 
 ### 🔁 El flujo: cada vez que trabajes en tu parte
 

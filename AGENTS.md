@@ -19,6 +19,7 @@ Con la respuesta, revisa que su nombre esté en estos lugares y agrégalo donde 
 | Su encabezado en `README.md`, sección Tareas | `### 05 · Registro — Juan Pérez` (ver abajo). |
 | El `package-info.java` de **cada una** de sus carpetas | `<b>Dueño: Integrante 05 · Registro — Juan Pérez</b> (servidor)` |
 | `git config user.name` / `user.email` | Su nombre y el correo de su GitHub. Si no coinciden, díselo; sus commits cuentan en la coevaluación. |
+| `git config core.hooksPath` | Debe ser `.githooks` (activa el aviso al hacer push). Si no lo es, córrelo: `git config core.hooksPath .githooks` |
 
 Si el área ya tiene **otro** nombre, detente y avisa: puede que la persona se equivocó de número.
 
@@ -34,6 +35,21 @@ a partir de los encabezados `### NN · Área — Nombre` y de las casillas `[x]`
 ```
 
 Después de cambiar un encabezado o una casilla, corre `python3 scripts/progreso.py` y sube el README que genere.
+
+## 🔄 Siempre al día con GitHub
+
+Tus compañeros suben cambios todo el tiempo. Trabajar sobre una copia vieja provoca conflictos y PRs con archivos ajenos.
+
+- **Al empezar cada sesión**, antes de tocar nada, trae lo último y mételo en tu rama:
+  ```bash
+  git checkout main && git pull
+  git checkout <su-rama> && git merge main
+  ```
+- **Al terminar**, sube lo que hiciste para no perderlo y para que los demás lo vean: `git push`.
+- Si hace rato que abriste tu PR, repite el `git merge main` y vuelve a hacer `git push` antes de pedir la revisión.
+- Hay dos avisos automáticos. **Ninguno bloquea**, solo advierten:
+  - Al hacer `git push`, si tu rama está atrasada respecto a `main` sale un ⚠️ en la terminal (el push se hace igual).
+  - En GitHub, el bot comenta en el PR cuando a su rama le falta algo de `main`.
 
 ## 🌿 Ramas: nunca en `main`
 
