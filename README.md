@@ -550,7 +550,7 @@ flowchart LR
 
 </details>
 
-### 04 · Ventana del servidor —
+### 04 · Ventana del servidor — Jehu Uribe Bermúdez
 
 > 🎯 **Objetivo:** que el servidor **vea todo** lo que pasa en el sistema, en tiempo real y con historial.
 >
