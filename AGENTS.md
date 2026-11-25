@@ -16,11 +16,36 @@ Con la respuesta, revisa que su nombre esté en estos lugares y agrégalo donde 
 
 | Dónde | Cómo debe quedar |
 |---|---|
-| Su encabezado en `README.md`, sección Tareas | `### 05 · Registro — Juan Pérez`. **No** edites la tabla de progreso: la genera `scripts/progreso.py` a partir de estos encabezados y lo que escribas a mano ahí se pierde. |
+| Su encabezado en `README.md`, sección Tareas | `### 05 · Registro — Juan Pérez` (ver abajo). |
 | El `package-info.java` de **cada una** de sus carpetas | `<b>Dueño: Integrante 05 · Registro — Juan Pérez</b> (servidor)` |
 | `git config user.name` / `user.email` | Su nombre y el correo de su GitHub. Si no coinciden, díselo; sus commits cuentan en la coevaluación. |
 
 Si el área ya tiene **otro** nombre, detente y avisa: puede que la persona se equivocó de número.
+
+### ⚠️ La tabla de progreso NO se edita a mano
+
+Todo lo que está entre `<!-- PROGRESO:INICIO -->` y `<!-- PROGRESO:FIN -->` lo genera `scripts/progreso.py`
+a partir de los encabezados `### NN · Área — Nombre` y de las casillas `[x]`. Lo que escribas a mano ahí
+**se borra** la próxima vez que corra el script, y copiar las barras desde otro lado las daña.
+
+```diff
+- | 02 · Base de datos | Sergio Luis Soto Pulido | ...      ❌ en la tabla: se pierde
++ ### 02 · Base de datos — Sergio Luis Soto Pulido         ✅ en el encabezado de Tareas
+```
+
+Después de cambiar un encabezado o una casilla, corre `python3 scripts/progreso.py` y sube el README que genere.
+
+## 🔄 Siempre al día con GitHub
+
+Tus compañeros suben cambios todo el tiempo. Trabajar sobre una copia vieja provoca conflictos y PRs con archivos ajenos.
+
+- **Al empezar cada sesión**, antes de tocar nada, trae lo último y mételo en tu rama:
+  ```bash
+  git checkout main && git pull
+  git checkout <su-rama> && git merge main
+  ```
+- **Al terminar**, sube lo que hiciste para no perderlo y para que los demás lo vean: `git push`.
+- Si hace rato que abriste tu PR, repite el `git merge main` y vuelve a hacer `git push` antes de pedir la revisión.
 
 ## 🌿 Ramas: nunca en `main`
 
@@ -33,6 +58,15 @@ Si el área ya tiene **otro** nombre, detente y avisa: puede que la persona se e
 - Haz commits pequeños con mensajes claros (`Registro: validar que el usuario no exista`).
 - El PR va de su rama a `main`, con título `[05] Registro: ...` y con *Reviewer* al responsable de 01. En **el mismo PR** se marcan con `[x]` las tareas terminadas en el README.
 - Si ya hay cambios hechos en `main` sin commit: `git checkout -b <su-rama>` y se los lleva.
+- **Para traer lo nuevo de `main` usa `git merge origin/main`.** Nunca copies ni pegues archivos de `main`
+  o de otra rama en la tuya: git los toma como cambios tuyos, aparecen en tu PR y el historial dice que
+  tú los escribiste.
+- **Antes de abrir el PR** revisa qué lleva:
+  ```bash
+  git fetch origin && git diff --stat origin/main...HEAD
+  ```
+  Solo deben salir **tus carpetas** y tus líneas del README (tu encabezado, tus casillas y la tabla que generó el script).
+  Si sale algo más, no abras el PR: arréglalo o pregunta.
 
 ## 📁 Solo sus carpetas
 
