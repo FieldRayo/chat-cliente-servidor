@@ -35,6 +35,28 @@ a partir de los encabezados `### NN · Área — Nombre` y de las casillas `[x]`
 
 Después de cambiar un encabezado o una casilla, corre `python3 scripts/progreso.py` y sube el README que genere.
 
+## 📊 Progreso: marca cada tarea que termines (obligatorio)
+
+Las barras y porcentajes del README son lo que el equipo y el profesor ven del avance de cada quien.
+**Cada vez que se termine una tarea**, de código o de documentación, márcala en el mismo commit o PR:
+
+1. En `README.md`, sección Tareas, busca **su** encabezado (`### 05 · Registro — Juan Pérez`) y cambia
+   `- [ ]` por `- [x]` en la tarea terminada:
+   ```diff
+   - - [ ] 💻 Formulario de registro con validaciones
+   + - [x] 💻 Formulario de registro con validaciones
+   ```
+   Las `💻` cuentan como código y las `📄` como documentación (la documentación terminada en los Google Docs
+   también se marca aquí).
+2. Corre `python3 scripts/progreso.py`: recalcula los porcentajes y las barras de su área y del total.
+3. Sube el README junto con el código de esa tarea.
+
+Reglas:
+- Solo marca tareas **de su área** y que de verdad estén terminadas (compila, funciona y cumple su "Está listo cuando…").
+- **No escribas porcentajes ni barras a mano**: siempre salen del script.
+- No cambies el texto de las tareas ni agregues casillas nuevas; si falta una tarea, pídesela a 01 · Arquitectura.
+- Al terminar cualquier trabajo, revisa si alguna tarea quedó completa y, si es así, ofrécete a marcarla.
+
 ## 🔄 Siempre al día con GitHub
 
 Tus compañeros suben cambios todo el tiempo. Trabajar sobre una copia vieja provoca conflictos y PRs con archivos ajenos.
@@ -46,6 +68,9 @@ Tus compañeros suben cambios todo el tiempo. Trabajar sobre una copia vieja pro
   ```
 - **Al terminar**, sube lo que hiciste para no perderlo y para que los demás lo vean: `git push`.
 - Si hace rato que abriste tu PR, repite el `git merge main` y vuelve a hacer `git push` antes de pedir la revisión.
+- Hay dos avisos automáticos. **Ninguno bloquea ni hay que configurarlos**, solo advierten:
+  - Al abrir **Claude Code** en el proyecto, si la copia está atrasada respecto a `main` sale un ⚠️ (hook en `.claude/settings.json`). Menciónalo una vez y sigue con lo que pidió la persona.
+  - En GitHub, el bot comenta en el PR cuando a su rama le falta algo de `main`.
 
 ## 🌿 Ramas: nunca en `main`
 
@@ -99,10 +124,13 @@ El cliente nunca usa código del servidor ni la BD: todo lo pide por el protocol
 
 **Servidor**:
 - Base de datos solo a través de los DAOs de 02, con `PreparedStatement`. No escribas SQL en ningún otro lado.
+- La BD es **SQLite**, no MySQL: `schema.sql` usa `INTEGER PRIMARY KEY AUTOINCREMENT`, `TEXT`, `CHECK (...)` en lugar de
+  `ENUM`, y nada de `ENGINE=`, `UNSIGNED`, `INT(11)` ni `AUTO_INCREMENT`. Pruébalo con `sqlite3 :memory: < servidor/src/main/resources/schema.sql`.
 - 03 · Servidor: crea primero el `ObjectOutputStream`, llama `flush()` y después crea el `ObjectInputStream`. Llama `reset()` después de cada `writeObject`. Escucha en `Paquete.PUERTO`. Con `LOGOUT` **no** cierres el socket (el cliente vuelve al login con la misma conexión). Después de un `ELIMINAR_CUENTA` exitoso, da la sesión por terminada.
 
 ## ✅ Antes de proponer un commit o un PR
 
 - `mvn package` (o *Clean and Build* en el IDE) debe compilar: `main` es lo que se entrega.
+- Las tareas terminadas están marcadas con `[x]` y corriste `python3 scripts/progreso.py` (ver Progreso).
 - Si tu parte depende de otra que no está lista, usa datos falsos y avisa; no edites la carpeta ajena.
 - La documentación (caso de uso, diagrama de secuencia, clases, conclusión) va en los Google Docs enlazados en el README, no en el repo.
