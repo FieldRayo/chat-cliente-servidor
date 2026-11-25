@@ -605,7 +605,7 @@ flowchart LR
 >
 > 🔗 **Te necesitan:** **06 · Login** (manda al registro tras los fallos) y **07 · Cuenta** (usa la pregunta de seguridad) · **Dependes de:** **01 · Arquitectura**, **02 · Base de datos** y **03 · Servidor**.
 
-- [ ] 💻 Formulario de registro
+- [x] 💻 Formulario de registro
 - [ ] 💻 Validaciones (usuario único, contraseña)
 - [ ] 💻 Pregunta y respuesta de seguridad
 - [ ] 💻 Contraseña guardada con hash
