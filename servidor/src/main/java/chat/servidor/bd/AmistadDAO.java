@@ -88,7 +88,7 @@ public class AmistadDAO {
     public List<Usuario> amigosDe(int idUsuario) {
         String sql = "SELECT u.id_usuario, u.nombre_usuario, u.email, u.bloqueado "
                 + "FROM amistades a JOIN usuarios u "
-                + "ON u.id_usuario = IF(a.id_solicitante = ?, a.id_receptor, a.id_solicitante) "
+                + "ON u.id_usuario = CASE WHEN a.id_solicitante = ? THEN a.id_receptor ELSE a.id_solicitante END "
                 + "WHERE a.estado = 'aceptada' AND (a.id_solicitante = ? OR a.id_receptor = ?) "
                 + "ORDER BY u.nombre_usuario";
         List<Usuario> lista = new ArrayList<>();

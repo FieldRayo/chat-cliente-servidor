@@ -9,26 +9,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
+/** Abre conexiones a la base SQLite {@code chat.db} y crea las tablas desde schema.sql. */
 public final class BaseDatos {
-    private static final String HOST = "localhost";
-    private static final int PUERTO = 3306;
-    private static final String NOMBRE_BD = "cocochatpro8c";
-    private static final String USUARIO = "root";
-    private static final String CLAVE = "";
-
-    private static final String URL_SERVIDOR = "jdbc:mariadb://" + HOST + ":" + PUERTO + "/";
-    private static final String URL_BD = URL_SERVIDOR + NOMBRE_BD;
+    /** El archivo se crea solo, en la carpeta desde donde se ejecuta el servidor. */
+    private static final String URL = "jdbc:sqlite:chat.db";
 
     private BaseDatos() { }
 
     public static void inicializar() {
-        try (Connection c = DriverManager.getConnection(URL_SERVIDOR, USUARIO, CLAVE);
-             Statement st = c.createStatement()) {
-            st.executeUpdate("CREATE DATABASE IF NOT EXISTS `" + NOMBRE_BD
-                    + "` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
-        } catch (SQLException e) {
-            throw new BdException(e);
-        }
         try (Connection c = obtenerConexion(); Statement st = c.createStatement()) {
             for (String sentencia : leerSchema()) {
                 st.executeUpdate(sentencia);
@@ -38,8 +26,13 @@ public final class BaseDatos {
         }
     }
 
+    /** SQLite no aplica las FK (ni la cascada) si no se activan en cada conexión. */
     public static Connection obtenerConexion() throws SQLException {
-        return DriverManager.getConnection(URL_BD, USUARIO, CLAVE);
+        Connection c = DriverManager.getConnection(URL);
+        try (Statement st = c.createStatement()) {
+            st.execute("PRAGMA foreign_keys = ON");
+        }
+        return c;
     }
 
     private static String[] leerSchema() {
@@ -47,7 +40,8 @@ public final class BaseDatos {
             if (in == null) {
                 throw new IllegalStateException("No se encontró schema.sql en resources");
             }
-            String sql = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            String sql = new String(in.readAllBytes(), StandardCharsets.UTF_8)
+                    .replaceAll("(?m)^\\s*--.*$", ""); // quitar comentarios
             return java.util.Arrays.stream(sql.split(";"))
                     .map(String::trim)
                     .filter(s -> !s.isEmpty())
