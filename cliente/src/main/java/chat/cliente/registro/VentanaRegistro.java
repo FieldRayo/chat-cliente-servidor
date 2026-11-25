@@ -4,6 +4,7 @@ import chat.cliente.app.Conexion;
 import chat.comun.protocolo.Paquete;
 import chat.comun.protocolo.Tipo;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -17,10 +18,10 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
@@ -82,9 +83,11 @@ public class VentanaRegistro extends JFrame {
     private final JTextField txtRespuesta = new JTextField();
     private final JButton btnRegistrar = new JButton("Registrarme");
     private final JButton btnCancelar = new JButton("Cancelar");
+    /** Línea de mensajes abajo de los botones, igual que en VentanaLogin. */
+    private final JLabel lblMensaje = new JLabel(" ", SwingConstants.CENTER);
 
     public VentanaRegistro(Conexion conexion) {
-        super("Registro de usuario");
+        super("Chat - Registro");
         this.conexion = conexion;
         construirInterfaz();
         configurarEventos();
@@ -164,17 +167,19 @@ public class VentanaRegistro extends JFrame {
         panel.add(Box.createVerticalStrut(12));
     }
 
+    /** Botones centrados y, abajo, la línea de mensajes (mismo diseño que VentanaLogin). */
     private JPanel crearBotones() {
-        JPanel botones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        botones.setBorder(BorderFactory.createEmptyBorder(5, 25, 20, 15));
-
-        Dimension tamano = new Dimension(120, 30);
-        btnCancelar.setPreferredSize(tamano);
-        btnRegistrar.setPreferredSize(tamano);
-
-        botones.add(btnCancelar);
+        JPanel botones = new JPanel(new FlowLayout());
         botones.add(btnRegistrar);
-        return botones;
+        botones.add(btnCancelar);
+
+        lblMensaje.setForeground(Color.RED);
+
+        JPanel sur = new JPanel(new BorderLayout());
+        sur.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        sur.add(botones, BorderLayout.CENTER);
+        sur.add(lblMensaje, BorderLayout.SOUTH);
+        return sur;
     }
 
     private void configurarEventos() {
@@ -235,9 +240,7 @@ public class VentanaRegistro extends JFrame {
             int idPregunta, String respuesta) {
         if (conexion == null) {
             // Solo pasa al probar la ventana sola, sin servidor
-            JOptionPane.showMessageDialog(this,
-                    "Los datos son válidos.\n(Prueba sin servidor: no se envió nada.)",
-                    "Registro", JOptionPane.INFORMATION_MESSAGE);
+            mostrarAviso("Datos válidos (prueba sin servidor: no se envió nada)");
             return;
         }
 
@@ -250,6 +253,7 @@ public class VentanaRegistro extends JFrame {
 
         // Mientras llega la respuesta, se evita mandar el registro dos veces
         btnRegistrar.setEnabled(false);
+        mostrarAviso("Enviando registro...");
         conexion.enviar(new Paquete(Tipo.REGISTRO, usuario, null, datos));
     }
 
@@ -266,18 +270,26 @@ public class VentanaRegistro extends JFrame {
         }
     }
 
-    /** Se llama cuando el servidor responde OK. */
+    /**
+     * Se llama cuando el servidor responde OK. Deja el aviso en verde y
+     * desactiva "Registrarme"; el usuario cierra con "Cerrar" y vuelve al login.
+     */
     public void mostrarExito() {
-        JOptionPane.showMessageDialog(this,
-                "Tu cuenta se creó correctamente. Ya puedes iniciar sesión.",
-                "Registro", JOptionPane.INFORMATION_MESSAGE);
-        dispose();
+        mostrarAviso("Cuenta creada. Ya puedes iniciar sesión.");
+        btnRegistrar.setEnabled(false);
+        btnCancelar.setText("Cerrar");
     }
 
-    /** Se llama cuando falla una validación o el servidor responde ERROR. */
+    /** Mensaje de error en rojo (validación o ERROR del servidor). */
     public void mostrarError(String motivo) {
-        JOptionPane.showMessageDialog(this, motivo,
-                "Registro", JOptionPane.ERROR_MESSAGE);
+        lblMensaje.setForeground(Color.RED);
+        lblMensaje.setText(motivo);
+    }
+
+    /** Mensaje informativo en verde, como "Enviando..." en VentanaLogin. */
+    private void mostrarAviso(String mensaje) {
+        lblMensaje.setForeground(new Color(0, 130, 0));
+        lblMensaje.setText(mensaje);
     }
 
     /** Al cerrar la ventana deja de escuchar, para no recibir dos veces si se vuelve a abrir. */
