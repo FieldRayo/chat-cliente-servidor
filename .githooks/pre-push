@@ -1,0 +1,10 @@
+#!/bin/sh
+# Aviso (no bloquea): tu rama no tiene lo último de main. El push se hace igual.
+# Se activa una vez por clon con: git config core.hooksPath .githooks
+git fetch -q origin main 2>/dev/null || exit 0
+n=$(git rev-list --count HEAD..origin/main 2>/dev/null) || exit 0
+if [ "$n" -gt 0 ]; then
+  echo "⚠️  Aviso: tu rama está $n commit(s) detrás de main. Se sube igual, pero actualízala pronto:" >&2
+  echo "    git checkout main && git pull && git checkout $(git branch --show-current) && git merge main" >&2
+fi
+exit 0

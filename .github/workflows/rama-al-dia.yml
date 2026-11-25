@@ -1,7 +1,11 @@
 name: Rama al día
 
-# Falla si la rama del PR no tiene lo último de main. Arreglo: git merge origin/main y git push.
+# Solo avisa, nunca bloquea: si a la rama del PR le falta algo de main, deja un comentario.
 on: pull_request
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   rama-al-dia:
@@ -11,10 +15,29 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - run: |
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          RAMA: ${{ github.head_ref }}
+        run: |
           git fetch -q origin main
-          if ! git merge-base --is-ancestor origin/main HEAD; then
-            echo "::error::Tu rama está $(git rev-list --count HEAD..origin/main) commit(s) detrás de main. Corre: git checkout main && git pull && git checkout ${{ github.head_ref }} && git merge main && git push"
-            exit 1
+          n=$(git rev-list --count HEAD..origin/main)
+          if [ "$n" -gt 0 ]; then
+            echo "::warning::La rama está $n commit(s) detrás de main"
+            cat > aviso.md <<FIN
+          ⚠️ **Aviso:** esta rama está **$n commit(s) detrás de \`main\`**. Se puede revisar igual, pero conviene actualizarla antes de fusionar:
+          \`\`\`bash
+          git checkout main && git pull
+          git checkout $RAMA && git merge main
+          git push
+          \`\`\`
+          FIN
+          else
+            echo "✅ La rama ya tiene todo lo de \`main\`." > aviso.md
           fi
-          echo "La rama tiene todo lo de main."
+          # Un solo comentario del bot por PR: se edita en cada push en vez de llenar el PR de avisos.
+          if gh pr view "$PR" --json comments --jq '.comments[].author.login' | grep -qx 'github-actions'; then
+            gh pr comment "$PR" --edit-last --body-file aviso.md
+          elif [ "$n" -gt 0 ]; then
+            gh pr comment "$PR" --body-file aviso.md
+          fi
