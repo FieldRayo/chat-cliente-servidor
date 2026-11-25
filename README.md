@@ -42,18 +42,13 @@
 |---|---|---|---|---|
 | 🎯 Hitos | Todo el equipo | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 00 · Documentación general | Jesus Emir Ayala Rayo | — | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-<<<<<<< HEAD
-| 01 · Arquitectura e integración | Jesus Emir Ayala Rayo | `██░░░░░░░░` 17% | `░░░░░░░░░░` 0% | `█░░░░░░░░░` 11% |
-| 02 · Base de datos |Sergio Luis Soto Pulido | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-=======
 | 01 · Arquitectura e integración | Jesus Emir Ayala Rayo | `███████░░░` 67% | `░░░░░░░░░░` 0% | `████░░░░░░` 44% |
-| 02 · Base de datos | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
->>>>>>> 98d19bed11aedcbd1d8f0e12eea7cdf8feacc7c9
-| 03 · Núcleo del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 04 · Ventana del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 05 · Registro | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 06 · Inicio de sesión | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 07 · Recuperar acceso y eliminar cuenta | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
+| 02 · Base de datos | Sergio Luis Soto Pulido | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
+| 03 · Núcleo del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | ` ░ ░ ░ ░ ░` 0% | ` ░ ░ ░ ░ ░` 0% |
+| 04 · Ventana del servidor | _sin asignar_ | ` ░ ░ ░ ░ ░` 0% | ` ░ ░ ░ ░ ░` 0% | ` ░ ░ ░ ░ ░` 0% |
+| 05 · Registro | _sin asignar_ | ` ░ ░ ░ ░ ░` 0% | ` ░ ░ ░ ░ ░` 0% | ` ─ ─ ─ ─ ─` 0% |
+| 06 · Inicio de sesión | _sin asignar_ | ` ─ ─ ─ ─ ─` 0% | ` ─ ─ ─ ─ ─` 0% | ` ─ ─ ─ ─ ─` 0% |
+| 07 · Recuperar acceso y eliminar cuenta | _sin asignar_ | ` ─ ─ ─ ─ ─` 0% | ` ─ ─ ─ ─ ─` 0% | ` ─ ─ ─ ─ ─` 0% |
 | 08 · Ventana 1: Usuarios | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 09 · Amistades y notificaciones | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 10 · Ventana 2: Chat de amigos | Isaac Daniel Guzmán Chávez | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
