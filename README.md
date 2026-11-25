@@ -490,7 +490,7 @@ flowchart LR
 
 </details>
 
-### 03 · Núcleo del servidor —
+### 03 · Núcleo del servidor — Scarlett Martinez Lorence
 
 > 🎯 **Objetivo:** el corazón del sistema. Recibe todos los paquetes y los entrega a quien corresponde **sin saturarse**.
 >
@@ -498,11 +498,11 @@ flowchart LR
 >
 > 🔗 **Te necesitan:** **todas las áreas que vienen después** · **Dependes de:** **01 · Arquitectura** (protocolo) y **02 · Base de datos** (BD).
 
-- [ ] 💻 `ServerSocket` con pool de hilos (para que no se sature)
-- [ ] 💻 Registro de clientes conectados
-- [ ] 💻 Enrutamiento de mensajes C1 → servidor → C3
-- [ ] 💻 Aviso a todos cuando alguien se conecta o desconecta
-- [ ] 💻 Manejo de desconexiones abruptas
+- [x] 💻 `ServerSocket` con pool de hilos (para que no se sature)
+- [x] 💻 Registro de clientes conectados
+- [x] 💻 Enrutamiento de mensajes C1 → servidor → C3
+- [x] 💻 Aviso a todos cuando alguien se conecta o desconecta
+- [x] 💻 Manejo de desconexiones abruptas
 - [ ] 📄 Caso de uso: Enrutar mensaje
 - [ ] 📄 Diagrama de secuencia
 - [ ] 📄 Conclusión
