@@ -584,7 +584,7 @@ flowchart LR
 
 </details>
 
-### 05 · Registro —
+### 05 · Registro — Mery Natalia Dávila González
 
 > 🎯 **Objetivo:** que un usuario nuevo pueda crear su cuenta y dejar **los datos para recuperarla** después.
 >
