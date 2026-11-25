@@ -124,6 +124,8 @@ El cliente nunca usa código del servidor ni la BD: todo lo pide por el protocol
 
 **Servidor**:
 - Base de datos solo a través de los DAOs de 02, con `PreparedStatement`. No escribas SQL en ningún otro lado.
+- La BD es **SQLite**, no MySQL: `schema.sql` usa `INTEGER PRIMARY KEY AUTOINCREMENT`, `TEXT`, `CHECK (...)` en lugar de
+  `ENUM`, y nada de `ENGINE=`, `UNSIGNED`, `INT(11)` ni `AUTO_INCREMENT`. Pruébalo con `sqlite3 :memory: < servidor/src/main/resources/schema.sql`.
 - 03 · Servidor: crea primero el `ObjectOutputStream`, llama `flush()` y después crea el `ObjectInputStream`. Llama `reset()` después de cada `writeObject`. Escucha en `Paquete.PUERTO`. Con `LOGOUT` **no** cierres el socket (el cliente vuelve al login con la misma conexión). Después de un `ELIMINAR_CUENTA` exitoso, da la sesión por terminada.
 
 ## ✅ Antes de proponer un commit o un PR
