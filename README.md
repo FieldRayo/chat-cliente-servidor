@@ -51,7 +51,7 @@
 | 07 · Recuperar acceso y eliminar cuenta | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 08 · Ventana 1: Usuarios | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 09 · Amistades y notificaciones | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 10 · Ventana 2: Chat de amigos | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
+| 10 · Ventana 2: Chat de amigos | Isaac Daniel Guzmán Chávez | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 11 · Ventana 3: Grupos | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 <!-- PROGRESO:FIN -->
 
@@ -853,7 +853,7 @@ flowchart LR
 
 </details>
 
-### 10 · Ventana 2: Chat de amigos —
+### 10 · Ventana 2: Chat de amigos — Isaac Daniel Guzmán Chávez
 
 > 🎯 **Objetivo:** chatear con amigos **aunque estén desconectados**, con un historial que **siempre se conserva**.
 >
