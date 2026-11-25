@@ -490,7 +490,7 @@ flowchart LR
 
 </details>
 
-### 03 · Núcleo del servidor —
+### 03 · Núcleo del servidor — Scarlett Martinez Lorence
 
 > 🎯 **Objetivo:** el corazón del sistema. Recibe todos los paquetes y los entrega a quien corresponde **sin saturarse**.
 >
