@@ -9,7 +9,7 @@
 ![SQLite](https://img.shields.io/badge/DB-SQLite-003B57?logo=sqlite&logoColor=white)
 ![Sockets](https://img.shields.io/badge/Red-Sockets%20TCP-6E4C9F)
 ![Equipo](https://img.shields.io/badge/equipo-11%20integrantes-blue)
-![Progreso](https://img.shields.io/badge/progreso-1%25-red)
+![Progreso](https://img.shields.io/badge/progreso-4%25-red)
 
 [Progreso](#-progreso) · [Evaluación](#-evaluación) · [Arquitectura](#️-arquitectura) · [Funcionalidad](#-funcionalidad) · [Estructura](#️-estructura-del-proyecto) · [Piezas clave](#-piezas-clave) · [Orden](#️-orden-de-desarrollo) · [Tareas](#-tareas-por-integrante) · [Cómo contribuir](#-cómo-contribuir)
 
@@ -34,16 +34,16 @@
 
 | | Avance |
 |---|---|
-| 🏁 **Total** | `░░░░░░░░░░░░░░░░░░░░` 1% &nbsp; (1/106 tareas) |
-| 💻 Código | `░░░░░░░░░░░░░░░░░░░░` 2% |
+| 🏁 **Total** | `█░░░░░░░░░░░░░░░░░░░` 4% &nbsp; (4/106 tareas) |
+| 💻 Código | `█░░░░░░░░░░░░░░░░░░░` 7% |
 | 📄 Documentación | `░░░░░░░░░░░░░░░░░░░░` 0% |
 
 | Área | Responsable | 💻 Código | 📄 Docs | Total |
 |---|---|---|---|---|
 | 🎯 Hitos | Todo el equipo | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 00 · Documentación general | Jesus Emir Ayala Rayo | — | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 01 · Arquitectura e integración | Jesus Emir Ayala Rayo | `██░░░░░░░░` 17% | `░░░░░░░░░░` 0% | `█░░░░░░░░░` 11% |
-| 02 · Base de datos | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
+| 01 · Arquitectura e integración | Jesus Emir Ayala Rayo | `███████░░░` 67% | `░░░░░░░░░░` 0% | `████░░░░░░` 44% |
+| 02 · Base de datos | Sergio Luis Soto Pulido | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 03 · Núcleo del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 04 · Ventana del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 05 · Registro | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
@@ -51,7 +51,7 @@
 | 07 · Recuperar acceso y eliminar cuenta | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 08 · Ventana 1: Usuarios | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 09 · Amistades y notificaciones | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 10 · Ventana 2: Chat de amigos | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
+| 10 · Ventana 2: Chat de amigos | Isaac Daniel Guzmán Chávez | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 11 · Ventana 3: Grupos | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 <!-- PROGRESO:FIN -->
 
@@ -202,6 +202,19 @@ Paquete(tipo = MSG_AMIGO,    ──────►   Despachador lee "MSG_AMIGO"
         datos= "¡Hola!")               → lo anota en la Bitacora
                                        → Sesiones.enviarA("luis")    ──────►    su Conexion lo recibe
                                                                                 y su ChatAmigo lo muestra
+```
+
+**Cómo lo usa tu ventana** (área 01 ya lo dejó listo):
+
+```java
+// Toda ventana es un JFrame con constructor público (Conexion conexion). El usuario: conexion.getUsuario()
+// El menú la crea UNA vez al iniciar sesión (oculta) y su X solo la esconde:
+// suscríbete en el constructor y recibirás tus paquetes aunque la ventana no esté abierta.
+conexion.alRecibir(Tipo.LOGIN, p -> {            // recibes LOGIN y también el OK/ERROR que lo contesta
+    if (p.esOk()) { ... } else mostrarError((String) p.getDatos());
+});
+conexion.enviar(new Paquete(Tipo.LOGIN, usuario, null, contrasena));
+// En el servidor se contesta con Paquete.ok(peticion, datos) o Paquete.error(peticion, "motivo")
 ```
 
 Un login usa **el mismo sobre**, solo cambia el tipo: `Paquete(tipo = LOGIN, de = "ana", datos = "contraseña")`. El servidor responde con un `Paquete` de tipo `OK` o `ERROR`.
@@ -366,9 +379,9 @@ flowchart LR
 > 🔗 **Te necesitan:** **todos**, así que tu `Paquete` va primero, en la **fase 1** · **Dependes de:** nadie.
 
 - [x] 💻 Estructura del proyecto (`comun`, `servidor`, `cliente`)
-- [ ] 💻 Protocolo: clase `Paquete` y tipos de mensaje
-- [ ] 💻 Conexión del cliente (enviar y recibir en un hilo)
-- [ ] 💻 Configurar IP y puerto del servidor desde la GUI
+- [x] 💻 Protocolo: clase `Paquete` y tipos de mensaje
+- [x] 💻 Conexión del cliente (enviar y recibir en un hilo)
+- [x] 💻 Configurar IP y puerto del servidor desde la GUI
 - [ ] 💻 Generar `Servidor.jar` y `Cliente.jar`
 - [ ] 💻 Integrar las ramas de todos
 - [ ] 📄 Caso de uso: Conectar cliente al servidor
@@ -415,7 +428,7 @@ flowchart LR
 
 </details>
 
-### 02 · Base de datos —
+### 02 · Base de datos — Sergio Luis Soto Pulido
 
 > 🎯 **Objetivo:** guardar todo lo que debe sobrevivir y que **nadie más escriba SQL**.
 >
@@ -840,7 +853,7 @@ flowchart LR
 
 </details>
 
-### 10 · Ventana 2: Chat de amigos —
+### 10 · Ventana 2: Chat de amigos — Isaac Daniel Guzmán Chávez
 
 > 🎯 **Objetivo:** chatear con amigos **aunque estén desconectados**, con un historial que **siempre se conserva**.
 >
