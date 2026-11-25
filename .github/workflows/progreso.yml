@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # main está protegida; la deploy key "progreso-bot" es la excepción que deja subir este commit.
+          ssh-key: ${{ secrets.PROGRESO_KEY }}
       - run: python3 scripts/progreso.py --test
       - run: python3 scripts/progreso.py
       - name: Commit si cambió
