@@ -1,0 +1,20 @@
+name: Rama al día
+
+# Falla si la rama del PR no tiene lo último de main. Arreglo: git merge origin/main y git push.
+on: pull_request
+
+jobs:
+  rama-al-dia:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - run: |
+          git fetch -q origin main
+          if ! git merge-base --is-ancestor origin/main HEAD; then
+            echo "::error::Tu rama está $(git rev-list --count HEAD..origin/main) commit(s) detrás de main. Corre: git checkout main && git pull && git checkout ${{ github.head_ref }} && git merge main && git push"
+            exit 1
+          fi
+          echo "La rama tiene todo lo de main."

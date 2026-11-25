@@ -46,6 +46,9 @@ Tus compañeros suben cambios todo el tiempo. Trabajar sobre una copia vieja pro
   ```
 - **Al terminar**, sube lo que hiciste para no perderlo y para que los demás lo vean: `git push`.
 - Si hace rato que abriste tu PR, repite el `git merge main` y vuelve a hacer `git push` antes de pedir la revisión.
+- Hay dos avisos automáticos:
+  - **Claude Code** revisa al abrir cada sesión si la copia está atrasada (hook en `.claude/settings.json`). Si sale el aviso ⚠️, **actualiza antes de cualquier otra cosa**.
+  - En GitHub, el check **"Rama al día"** marca en rojo el PR si a su rama le falta algo de `main`, y no se puede fusionar hasta corregirlo. Se arregla con `git merge main` y `git push`.
 
 ## 🌿 Ramas: nunca en `main`
 
