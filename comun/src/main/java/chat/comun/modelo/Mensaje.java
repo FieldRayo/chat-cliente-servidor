@@ -1,4 +1,4 @@
-package com.cocochat.comun.modelo;
+package chat.comun.modelo;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
