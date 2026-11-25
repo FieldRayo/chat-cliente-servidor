@@ -9,7 +9,7 @@
 ![SQLite](https://img.shields.io/badge/DB-SQLite-003B57?logo=sqlite&logoColor=white)
 ![Sockets](https://img.shields.io/badge/Red-Sockets%20TCP-6E4C9F)
 ![Equipo](https://img.shields.io/badge/equipo-11%20integrantes-blue)
-![Progreso](https://img.shields.io/badge/progreso-5%25-red)
+![Progreso](https://img.shields.io/badge/progreso-9%25-red)
 
 [Progreso](#-progreso) · [Evaluación](#-evaluación) · [Arquitectura](#️-arquitectura) · [Funcionalidad](#-funcionalidad) · [Estructura](#️-estructura-del-proyecto) · [Piezas clave](#-piezas-clave) · [Orden](#️-orden-de-desarrollo) · [Tareas](#-tareas-por-integrante) · [Cómo contribuir](#-cómo-contribuir)
 
@@ -34,8 +34,8 @@
 
 | | Avance |
 |---|---|
-| 🏁 **Total** | `█░░░░░░░░░░░░░░░░░░░` 5% &nbsp; (5/106 tareas) |
-| 💻 Código | `██░░░░░░░░░░░░░░░░░░` 9% |
+| 🏁 **Total** | `██░░░░░░░░░░░░░░░░░░` 9% &nbsp; (10/106 tareas) |
+| 💻 Código | `████░░░░░░░░░░░░░░░░` 19% |
 | 📄 Documentación | `░░░░░░░░░░░░░░░░░░░░` 0% |
 
 | Área | Responsable | 💻 Código | 📄 Docs | Total |
@@ -44,7 +44,7 @@
 | 00 · Documentación general | Jesus Emir Ayala Rayo | — | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 01 · Arquitectura e integración | Jesus Emir Ayala Rayo | `███████░░░` 67% | `░░░░░░░░░░` 0% | `████░░░░░░` 44% |
 | 02 · Base de datos | Sergio Luis Soto Pulido | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 03 · Núcleo del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
+| 03 · Núcleo del servidor | Scarlett Martinez Lorence | `██████████` 100% | `░░░░░░░░░░` 0% | `██████░░░░` 62% |
 | 04 · Ventana del servidor | Jehu Uribe Bermúdez | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 05 · Registro | Mery Natalia Dávila González | `██░░░░░░░░` 25% | `░░░░░░░░░░` 0% | `█░░░░░░░░░` 12% |
 | 06 · Inicio de sesión | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
