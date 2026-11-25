@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$CLAUDE_PROJECT_DIR/.claude/al-dia.sh\"",
+            "timeout": 20,
+            "statusMessage": "Revisando si tu copia está al día con GitHub..."
+          }
+        ]
+      }
+    ]
+  }
+}

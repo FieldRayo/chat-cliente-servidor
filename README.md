@@ -991,11 +991,7 @@ flowchart LR
    git clone https://github.com/FieldRayo/chat-cliente-servidor.git
    cd chat-cliente-servidor
    ```
-5. **Activa el aviso de rama atrasada** (dentro de la carpeta del repo). Al hacer `git push` te avisa si te falta algo de `main`; no bloquea nada:
-   ```bash
-   git config core.hooksPath .githooks
-   ```
-6. **Pon tu nombre** en tu encabezado de [Tareas](#-tareas-por-integrante) (por ejemplo `### 05 · Registro — Juan Pérez`). Súbelo en tu primer PR.
+5. **Pon tu nombre** en tu encabezado de [Tareas](#-tareas-por-integrante) (por ejemplo `### 05 · Registro — Juan Pérez`). Súbelo en tu primer PR.
 
 ### 🔁 El flujo: cada vez que trabajes en tu parte
 
