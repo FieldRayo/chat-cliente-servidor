@@ -47,7 +47,7 @@
 | 03 · Núcleo del servidor | Scarlett Martinez Lorence | `██████████` 100% | `░░░░░░░░░░` 0% | `██████░░░░` 62% |
 | 04 · Ventana del servidor | Jehu Uribe Bermúdez | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 05 · Registro | Mery Natalia Dávila González | `██░░░░░░░░` 25% | `░░░░░░░░░░` 0% | `█░░░░░░░░░` 12% |
-| 06 · Inicio de sesión | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
+| 06 · Inicio de sesión | Carlos | `░░░░░░░░░░` 67777% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 07 · Recuperar acceso y eliminar cuenta | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 08 · Ventana 1: Usuarios | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 09 · Amistades y notificaciones | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
