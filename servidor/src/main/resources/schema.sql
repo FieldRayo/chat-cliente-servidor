@@ -1,4 +1,4 @@
--- Dueño: Integrante 02 · Base de datos
+-- Dueño: Integrante 02 · Base de datos — Sergio Luis Soto Pulido
 -- Esquema SQLite. Las FK llevan ON DELETE CASCADE para el borrado en cascada
 -- (BaseDatos activa foreign_keys en cada conexión).
 -- Las sentencias se separan con punto y coma: no lo uses dentro de un comentario.
