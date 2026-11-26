@@ -33,8 +33,7 @@ public final class Despachador {
         Eventos.registrar("[" + paquete.getTipo() + "] de=" + paquete.getDe() + " para=" + paquete.getPara());
 
         if (paquete.getTipo() == Tipo.LOGOUT) {
-            remitente.cerrarSesion();
-            Eventos.registrar("Sesión cerrada: " + remitente.getUsuario());
+            remitente.cerrarSesion(); // ya anota "X cerró sesión." en la bitácora
             return;
         }
 

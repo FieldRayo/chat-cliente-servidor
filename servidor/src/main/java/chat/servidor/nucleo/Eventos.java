@@ -16,7 +16,15 @@ public final class Eventos {
         destino = nuevoDestino;
     }
 
+    /**
+     * Anota un evento. Si el destino falla (por ejemplo, la BD de la bitácora), el error se
+     * imprime y no se propaga: anotar nunca debe desconectar a un cliente.
+     */
     public static void registrar(String evento) {
-        destino.accept(evento);
+        try {
+            destino.accept(evento);
+        } catch (RuntimeException e) {
+            System.err.println("No se pudo registrar el evento \"" + evento + "\": " + e);
+        }
     }
 }
