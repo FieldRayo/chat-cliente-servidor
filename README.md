@@ -48,7 +48,7 @@
 | 04 · Ventana del servidor | Jehu Uribe Bermúdez | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 05 · Registro | Mery Natalia Dávila González | `██░░░░░░░░` 25% | `░░░░░░░░░░` 0% | `█░░░░░░░░░` 12% |
 | 06 · Inicio de sesión | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 07 · Recuperar acceso y eliminar cuenta | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
+| 07 · Recuperar acceso y eliminar cuenta | Fernando Rodríguez Sánchez | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 08 · Ventana 1: Usuarios | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 09 · Amistades y notificaciones | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 10 · Ventana 2: Chat de amigos | Isaac Daniel Guzmán Chávez | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
@@ -696,7 +696,7 @@ flowchart LR
 
 </details>
 
-### 07 · Recuperar acceso y eliminar cuenta —
+### 07 · Recuperar acceso y eliminar cuenta — Fernando Rodríguez Sánchez
 
 > 🎯 **Objetivo:** que el usuario **recupere su acceso en cualquier momento** con datos que ya dio, y que pueda eliminar su cuenta.
 >
