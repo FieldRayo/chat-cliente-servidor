@@ -18,6 +18,8 @@ public final class ManejadorCliente implements Runnable {
     private final Socket socket;
     private final Despachador despachador;
     private final AtomicBoolean cerrado = new AtomicBoolean(false);
+    /** Protege el cambio de usuario (iniciar/cerrar sesión). Distinto del candado de escritura. */
+    private final Object candadoSesion = new Object();
     private ObjectOutputStream salida;
     private volatile String usuario;
 
@@ -66,9 +68,12 @@ public final class ManejadorCliente implements Runnable {
      * Lo llama el servicio de login al validar la contraseña.
      */
     public boolean iniciarSesion(String nuevoUsuario) {
-        if (usuario != null) return false;
-        if (!Sesiones.iniciar(nuevoUsuario, this)) return false;
-        usuario = nuevoUsuario;
+        synchronized (candadoSesion) {
+            if (usuario != null || cerrado.get()) return false;
+            if (!Sesiones.iniciar(nuevoUsuario, this)) return false;
+            usuario = nuevoUsuario;
+        }
+        // Los avisos van fuera del candado: enviar a otros clientes puede tardar.
         Eventos.registrar(nuevoUsuario + " inició sesión.");
         Sesiones.difundir(new Paquete(Tipo.USUARIO_CONECTADO, null, null, nuevoUsuario));
         return true;
@@ -79,10 +84,13 @@ public final class ManejadorCliente implements Runnable {
      * vuelve al login con el mismo socket. Lo usan LOGOUT y, después de eliminar la cuenta, 07 · Cuenta.
      */
     public void cerrarSesion() {
-        String anterior = usuario;
-        if (anterior == null) return;
-        usuario = null;
-        Sesiones.cerrar(anterior, this);
+        String anterior;
+        synchronized (candadoSesion) {        // LOGOUT y una caída a la vez no avisan dos veces
+            anterior = usuario;
+            if (anterior == null) return;
+            usuario = null;
+            Sesiones.cerrar(anterior, this);
+        }
         Eventos.registrar(anterior + " cerró sesión.");
         Sesiones.difundir(new Paquete(Tipo.USUARIO_DESCONECTADO, null, null, anterior));
     }

@@ -1,6 +1,11 @@
 package chat.servidor.nucleo;
 
 import chat.comun.protocolo.Paquete;
+import chat.comun.protocolo.Tipo;
+import chat.servidor.bd.BaseDatos;
+import chat.servidor.cuenta.CuentaServicio;
+import chat.servidor.login.LoginServicio;
+import chat.servidor.registro.RegistroServicio;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -22,7 +27,20 @@ public final class ServidorMain {
     private ServidorMain() { }
 
     public static void main(String[] args) throws IOException {
-        arrancar(new Despachador(), Paquete.PUERTO);
+        // 1. Base de datos (02): crea chat.db y sus tablas si no existen.
+        BaseDatos.inicializar();
+
+        // 2. Ventana del servidor (04): cuando esté lista, se abre aquí y se conecta con
+        //    Eventos.alRegistrar(bitacora::registrar). Mientras, los eventos salen en consola.
+
+        // 3. Servicios de cada área. Una línea por servicio; los que faltan se agregan al terminarlos.
+        Despachador despachador = new Despachador();
+        despachador.registrar(new RegistroServicio(), Tipo.REGISTRO);   // 05 · Registro
+        despachador.registrar(new LoginServicio(), Tipo.LOGIN);         // 06 · Inicio de sesión
+        CuentaServicio.registrarEn(despachador);                        // 07 · Recuperar acceso y eliminar cuenta
+
+        // 4. Red: abre el puerto y atiende clientes.
+        arrancar(despachador, Paquete.PUERTO);
     }
 
     /**
@@ -36,8 +54,15 @@ public final class ServidorMain {
 
         try (ServerSocket servidor = new ServerSocket(puerto)) {
             Eventos.registrar("Servidor escuchando en el puerto " + puerto + ".");
-            while (true) {
-                Socket socket = servidor.accept();
+            while (!servidor.isClosed()) {
+                Socket socket;
+                try {
+                    socket = servidor.accept();
+                } catch (IOException e) {
+                    // Un fallo al aceptar a un cliente no debe tumbar el servidor completo.
+                    Eventos.registrar("No se pudo aceptar una conexión: " + e.getMessage());
+                    continue;
+                }
                 try {
                     pool.execute(new ManejadorCliente(socket, despachador));
                 } catch (RejectedExecutionException e) {
@@ -45,6 +70,8 @@ public final class ServidorMain {
                     socket.close();
                 }
             }
+        } finally {
+            pool.shutdownNow();
         }
     }
 }
