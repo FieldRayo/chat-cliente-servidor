@@ -73,3 +73,10 @@ CREATE TABLE IF NOT EXISTS mensajes_grupo (
   fecha      TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX IF NOT EXISTS idx_msggr_grupo_fecha ON mensajes_grupo (id_grupo, fecha);
+
+
+CREATE TABLE IF NOT EXISTS bitacora (
+  id_bitacora INTEGER PRIMARY KEY AUTOINCREMENT,
+  fecha       TEXT    NOT NULL DEFAULT (datetime('now', 'localtime')),
+  evento      TEXT    NOT NULL
+);
