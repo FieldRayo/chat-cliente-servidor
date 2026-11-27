@@ -9,7 +9,7 @@
 ![SQLite](https://img.shields.io/badge/DB-SQLite-003B57?logo=sqlite&logoColor=white)
 ![Sockets](https://img.shields.io/badge/Red-Sockets%20TCP-6E4C9F)
 ![Equipo](https://img.shields.io/badge/equipo-11%20integrantes-blue)
-![Progreso](https://img.shields.io/badge/progreso-5%25-red)
+![Progreso](https://img.shields.io/badge/progreso-25%25-red)
 
 [Progreso](#-progreso) · [Evaluación](#-evaluación) · [Arquitectura](#️-arquitectura) · [Funcionalidad](#-funcionalidad) · [Estructura](#️-estructura-del-proyecto) · [Piezas clave](#-piezas-clave) · [Orden](#️-orden-de-desarrollo) · [Tareas](#-tareas-por-integrante) · [Cómo contribuir](#-cómo-contribuir)
 
@@ -34,21 +34,21 @@
 
 | | Avance |
 |---|---|
-| 🏁 **Total** | `█░░░░░░░░░░░░░░░░░░░` 5% &nbsp; (5/106 tareas) |
-| 💻 Código | `██░░░░░░░░░░░░░░░░░░` 9% |
+| 🏁 **Total** | `█████░░░░░░░░░░░░░░░` 25% &nbsp; (27/106 tareas) |
+| 💻 Código | `██████████░░░░░░░░░░` 50% |
 | 📄 Documentación | `░░░░░░░░░░░░░░░░░░░░` 0% |
 
 | Área | Responsable | 💻 Código | 📄 Docs | Total |
 |---|---|---|---|---|
 | 🎯 Hitos | Todo el equipo | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 00 · Documentación general | Jesus Emir Ayala Rayo | — | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 01 · Arquitectura e integración | Jesus Emir Ayala Rayo | `███████░░░` 67% | `░░░░░░░░░░` 0% | `████░░░░░░` 44% |
-| 02 · Base de datos | Sergio Luis Soto Pulido | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 03 · Núcleo del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 04 · Ventana del servidor | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 05 · Registro | Mery Natalia Dávila González | `██░░░░░░░░` 25% | `░░░░░░░░░░` 0% | `█░░░░░░░░░` 12% |
-| 06 · Inicio de sesión | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
-| 07 · Recuperar acceso y eliminar cuenta | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
+| 01 · Arquitectura e integración | Jesus Emir Ayala Rayo | `████████░░` 83% | `░░░░░░░░░░` 0% | `██████░░░░` 56% |
+| 02 · Base de datos | Sergio Luis Soto Pulido | `█████░░░░░` 50% | `░░░░░░░░░░` 0% | `██░░░░░░░░` 25% |
+| 03 · Núcleo del servidor | Scarlett Martinez Lorence | `██████████` 100% | `░░░░░░░░░░` 0% | `██████░░░░` 62% |
+| 04 · Ventana del servidor | Jehu Uribe Bermúdez | `████████░░` 75% | `░░░░░░░░░░` 0% | `████░░░░░░` 38% |
+| 05 · Registro | Mery Natalia Dávila González | `██████████` 100% | `░░░░░░░░░░` 0% | `█████░░░░░` 50% |
+| 06 · Inicio de sesión | Carlos Villalobos | `██████████` 100% | `░░░░░░░░░░` 0% | `██████░░░░` 56% |
+| 07 · Recuperar acceso y eliminar cuenta | Fernando Rodríguez Sánchez | `██████████` 100% | `░░░░░░░░░░` 0% | `████░░░░░░` 43% |
 | 08 · Ventana 1: Usuarios | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 09 · Amistades y notificaciones | _sin asignar_ | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
 | 10 · Ventana 2: Chat de amigos | Isaac Daniel Guzmán Chávez | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% | `░░░░░░░░░░` 0% |
@@ -187,7 +187,7 @@ Son las piezas que **todos usan**. Cada una tiene un área dueña. Si necesitas 
 | `Sesiones` | La **lista de quién está conectado**. `Sesiones.enviarA("luis", paquete)` le entrega algo a Luis. | **03 · Servidor** | Los servicios del servidor |
 | `Despachador` | El **cartero** del servidor. Lee el `Tipo` de cada paquete y lo entrega al servicio correcto. | **03 · Servidor** | El servidor (conectar tu servicio se lo pides a 03) |
 | Servicios (`LoginServicio`, `GruposServicio`…) | La **lógica de tu función** en el servidor. Recibe tu paquete, valida, usa los DAOs y responde. | Cada área, de la 05 a la 11 | El `Despachador` |
-| `Bitacora` | La **libreta** del servidor. Anota todo lo que pasa y lo muestra en la ventana del servidor. | **04 · Ventana del servidor** | El `Despachador` |
+| `Eventos` → `Bitacora` | La **libreta** del servidor. El núcleo anota todo con `Eventos.registrar(...)` y 04 lo manda a su `Bitacora` (pantalla y BD) con `Eventos.alRegistrar(...)`. | **03** (`Eventos`) y **04 · Ventana del servidor** (`Bitacora`) | El `Despachador` y los servicios |
 | `Notificaciones` | La **ventana de avisos**. Cualquiera la llama con `Notificaciones.mostrar(...)`. | **09 · Amistades** | Chat de amigos y Grupos |
 
 <details>
@@ -229,7 +229,7 @@ java -jar servidor/target/Servidor.jar    # en la computadora servidor
 java -jar cliente/target/Cliente.jar      # en cada computadora cliente
 ```
 
-> Los `.jar` se van a poder ejecutar cuando existan `ServidorMain` (lo hace **03 · Servidor**) y `ClienteMain` (lo hace **01 · Arquitectura**).
+> `mvn package` ya genera los dos `.jar` y abren. Una función del servidor empieza a responder cuando **03 · Servidor** conecta su servicio en `ServidorMain` (`despachador.registrar(...)`): al terminar tu servicio, pídeselo.
 
 ## 🗓️ Orden de desarrollo
 
@@ -382,7 +382,7 @@ flowchart LR
 - [x] 💻 Protocolo: clase `Paquete` y tipos de mensaje
 - [x] 💻 Conexión del cliente (enviar y recibir en un hilo)
 - [x] 💻 Configurar IP y puerto del servidor desde la GUI
-- [ ] 💻 Generar `Servidor.jar` y `Cliente.jar`
+- [x] 💻 Generar `Servidor.jar` y `Cliente.jar`
 - [ ] 💻 Integrar las ramas de todos
 - [ ] 📄 Caso de uso: Conectar cliente al servidor
 - [ ] 📄 Diagrama de secuencia
@@ -438,8 +438,8 @@ flowchart LR
 
 - [ ] 💻 Esquema SQLite (usuarios, amistades, mensajes, grupos, miembros, bitácora)
 - [ ] 💻 DAOs para que nadie escriba SQL suelto
-- [ ] 💻 Borrado en cascada (`ON DELETE CASCADE`)
-- [ ] 💻 Datos de prueba
+- [x] 💻 Borrado en cascada (`ON DELETE CASCADE`)
+- [x] 💻 Datos de prueba
 - [ ] 📄 Diagrama de la base de datos
 - [ ] 📄 Caso de uso: Eliminar cuenta
 - [ ] 📄 Diagrama de secuencia
@@ -449,22 +449,26 @@ flowchart LR
 <summary><b>📖 Guía detallada: qué tienes que hacer</b></summary>
 
 **💻 Código**
-1. **`schema.sql`**, con las tablas sugeridas:
+1. **`schema.sql`**, así quedó (los demás usen estos nombres):
 
    | Tabla | Columnas clave |
    |---|---|
-   | `usuarios` | `id`, `usuario` UNIQUE, `hash`, `sal`, `pregunta`, `respuesta_hash`, `intentos`, `bloqueado` |
-   | `amistades` | `solicitante` FK, `receptor` FK, `estado` (PENDIENTE/ACEPTADA) |
-   | `mensajes_amigos` | `de` FK, `para` FK, `texto`, `fecha`, `entregado` |
-   | `grupos` | `id`, `nombre`, `dueno` FK |
-   | `grupo_miembros` | `grupo` FK, `usuario` FK, `estado` (PENDIENTE/ACTIVO) |
-   | `mensajes_grupo` | `grupo` FK, `de` FK, `texto`, `fecha` |
-   | `bitacora` | `fecha`, `evento` |
+   | `usuarios` | `id_usuario`, `nombre_usuario` UNIQUE, `email` UNIQUE, `psw` (`sal:hash`), `intentos_fallidos`, `bloqueado` |
+   | `preguntas_seguridad` | `id_pregunta`, `pregunta` (las 5 del combo de **05 · Registro**) |
+   | `respuestas_seguridad` | `id_usuario` FK, `id_pregunta` FK, `respuesta_hash` |
+   | `amistades` | `id_amistad`, `id_solicitante` FK, `id_receptor` FK, `estado` (`pendiente`/`aceptada`) |
+   | `mensajes_amigos` | `id_amistad` FK, `id_emisor` FK, `contenido`, `fecha` |
+   | `grupos` | `id_grupo`, `nombre`, `id_dueno` FK |
+   | `miembros_grupo` | `id_grupo` FK, `id_usuario` FK, `estado` (`invitado`/`aceptado`) |
+   | `mensajes_grupo` | `id_grupo` FK, `id_emisor` FK, `contenido`, `fecha` |
+   | `bitacora` ⏳ | `fecha`, `evento` |
+
+   **Falta:** la tabla `bitacora` con su `BitacoraDAO` (la usa **04**) y una columna `entregado` en `mensajes_amigos` (la usa **10** para los mensajes a desconectados).
 
 2. Todas las FK llevan **`ON DELETE CASCADE`**. Así, al borrar un usuario se borran solas sus amistades, sus mensajes y sus membresías.
    - SQLite necesita `PRAGMA foreign_keys = ON;` **en cada conexión**. Si no, la cascada no funciona.
 3. **`BaseDatos`**: abre la conexión a `chat.db` y crea las tablas desde `schema.sql` si no existen.
-4. **DAOs** (`UsuarioDAO`, `AmistadDAO`, `MensajeAmigoDAO`, `GrupoDAO`, `BitacoraDAO`):
+4. **DAOs** (`UsuarioDAO`, `SeguridadDAO`, `AmistadDAO`, `MensajeAmigoDAO`, `GrupoDAO` ya están; falta `BitacoraDAO`):
    - Usa siempre **`PreparedStatement`**, nunca concatenes texto, para evitar la inyección SQL.
    - Los métodos tienen nombres claros: `existe(usuario)`, `pendientesDe(usuario)`, `historial(a, b)`, `contarMiembros(grupo)`...
 5. **Modelos** (`comun/…/modelo/`): `Usuario`, `Mensaje`, `Grupo`, `Solicitud`. Son `Serializable` y **nunca** llevan el hash de la contraseña.
@@ -490,7 +494,7 @@ flowchart LR
 
 </details>
 
-### 03 · Núcleo del servidor —
+### 03 · Núcleo del servidor — Scarlett Martinez Lorence
 
 > 🎯 **Objetivo:** el corazón del sistema. Recibe todos los paquetes y los entrega a quien corresponde **sin saturarse**.
 >
@@ -498,11 +502,11 @@ flowchart LR
 >
 > 🔗 **Te necesitan:** **todas las áreas que vienen después** · **Dependes de:** **01 · Arquitectura** (protocolo) y **02 · Base de datos** (BD).
 
-- [ ] 💻 `ServerSocket` con pool de hilos (para que no se sature)
-- [ ] 💻 Registro de clientes conectados
-- [ ] 💻 Enrutamiento de mensajes C1 → servidor → C3
-- [ ] 💻 Aviso a todos cuando alguien se conecta o desconecta
-- [ ] 💻 Manejo de desconexiones abruptas
+- [x] 💻 `ServerSocket` con pool de hilos (para que no se sature)
+- [x] 💻 Registro de clientes conectados
+- [x] 💻 Enrutamiento de mensajes C1 → servidor → C3
+- [x] 💻 Aviso a todos cuando alguien se conecta o desconecta
+- [x] 💻 Manejo de desconexiones abruptas
 - [ ] 📄 Caso de uso: Enrutar mensaje
 - [ ] 📄 Diagrama de secuencia
 - [ ] 📄 Conclusión
@@ -550,7 +554,7 @@ flowchart LR
 
 </details>
 
-### 04 · Ventana del servidor —
+### 04 · Ventana del servidor — Jehu Uribe Bermúdez
 
 > 🎯 **Objetivo:** que el servidor **vea todo** lo que pasa en el sistema, en tiempo real y con historial.
 >
@@ -558,9 +562,9 @@ flowchart LR
 >
 > 🔗 **Te necesitan:** **03 · Servidor**, que registra cada paquete en tu bitácora · **Dependes de:** **02 · Base de datos** (`BitacoraDAO`) y **03 · Servidor**.
 
-- [ ] 💻 Bitácora en tiempo real
-- [ ] 💻 Búsqueda y filtro en el historial
-- [ ] 💻 Vista de usuarios, amistades, grupos y mensajes
+- [x] 💻 Bitácora en tiempo real
+- [x] 💻 Búsqueda y filtro en el historial
+- [x] 💻 Vista de usuarios, amistades, grupos y mensajes
 - [ ] 💻 Bitácora guardada en la BD
 - [ ] 📄 Caso de uso: Consultar bitácora
 - [ ] 📄 Diagrama de secuencia
@@ -571,7 +575,7 @@ flowchart LR
 <summary><b>📖 Guía detallada: qué tienes que hacer</b></summary>
 
 **💻 Código**
-1. **`Bitacora`**: un método `registrar(String evento)` que:
+1. **`Bitacora`**: un método `registrar(String evento)` que se conecta al arrancar con `Eventos.alRegistrar(Bitacora::registrar)` (así recibe todo lo que anota el núcleo) y que:
    - Guarda el evento en la BD con `BitacoraDAO`.
    - Lo muestra en la ventana con `SwingUtilities.invokeLater`.
 2. **`VentanaServidor`**, con pestañas:
@@ -606,9 +610,9 @@ flowchart LR
 > 🔗 **Te necesitan:** **06 · Login** (manda al registro tras los fallos) y **07 · Cuenta** (usa la pregunta de seguridad) · **Dependes de:** **01 · Arquitectura**, **02 · Base de datos** y **03 · Servidor**.
 
 - [x] 💻 Formulario de registro
-- [ ] 💻 Validaciones (usuario único, contraseña)
-- [ ] 💻 Pregunta y respuesta de seguridad
-- [ ] 💻 Contraseña guardada con hash
+- [x] 💻 Validaciones (usuario único, contraseña)
+- [x] 💻 Pregunta y respuesta de seguridad
+- [x] 💻 Contraseña guardada con hash
 - [ ] 📄 Caso de uso: Registrar usuario
 - [ ] 📄 Diagrama de secuencia
 - [ ] 📄 Manual: Registro
@@ -619,7 +623,7 @@ flowchart LR
 
 **💻 Código**
 1. **`VentanaRegistro`** (cliente):
-   - Campos: usuario, contraseña, confirmar contraseña, pregunta de seguridad (un combo con opciones) y respuesta.
+   - Campos: usuario, correo, contraseña, confirmar contraseña, pregunta de seguridad (un combo con 5 opciones) y respuesta.
    - Se puede abrir desde el login y también **sola**, cuando **06 · Login** manda al usuario a registrarse.
 2. **Validaciones en el cliente:** ningún campo vacío, las contraseñas coinciden y la contraseña tiene al menos 6 caracteres.
 3. **`RegistroServicio`** (servidor):
@@ -646,7 +650,7 @@ flowchart LR
 
 </details>
 
-### 06 · Inicio de sesión —
+### 06 · Inicio de sesión — Carlos Villalobos
 
 > 🎯 **Objetivo:** que solo entren usuarios registrados y que se **bloquee al tercer intento fallido**.
 >
@@ -654,11 +658,11 @@ flowchart LR
 >
 > 🔗 **Te necesitan:** **08 · Usuarios**, **09 · Amistades**, **10 · Chat de amigos** y **11 · Grupos**, que solo trabajan con sesión iniciada · **Dependes de:** **01 · Arquitectura**, **02 · Base de datos**, **03 · Servidor** y **05 · Registro**.
 
-- [ ] 💻 Ventana de inicio de sesión
-- [ ] 💻 Validación contra el servidor
-- [ ] 💻 Bloqueo al tercer intento fallido
-- [ ] 💻 Mandar al registro si el usuario no existe
-- [ ] 💻 Impedir dos sesiones abiertas con el mismo usuario
+- [x] 💻 Ventana de inicio de sesión
+- [x] 💻 Validación contra el servidor
+- [x] 💻 Bloqueo al tercer intento fallido
+- [x] 💻 Mandar al registro si el usuario no existe
+- [x] 💻 Impedir dos sesiones abiertas con el mismo usuario
 - [ ] 📄 Caso de uso: Iniciar sesión
 - [ ] 📄 Diagrama de secuencia
 - [ ] 📄 Manual: Inicio de sesión
@@ -696,7 +700,7 @@ flowchart LR
 
 </details>
 
-### 07 · Recuperar acceso y eliminar cuenta —
+### 07 · Recuperar acceso y eliminar cuenta — Fernando Rodríguez Sánchez
 
 > 🎯 **Objetivo:** que el usuario **recupere su acceso en cualquier momento** con datos que ya dio, y que pueda eliminar su cuenta.
 >
@@ -704,9 +708,9 @@ flowchart LR
 >
 > 🔗 **Te necesitan:** **06 · Login**, que manda aquí a los bloqueados · **Dependes de:** **02 · Base de datos** (cascada), **05 · Registro** (pregunta de seguridad) y **11 · Grupos** (regla de los 3).
 
-- [ ] 💻 Ventana de recuperación con pregunta de seguridad
-- [ ] 💻 Restablecer contraseña y desbloquear
-- [ ] 💻 Botón "Eliminar mi cuenta" con confirmación
+- [x] 💻 Ventana de recuperación con pregunta de seguridad
+- [x] 💻 Restablecer contraseña y desbloquear
+- [x] 💻 Botón "Eliminar mi cuenta" con confirmación
 - [ ] 📄 Caso de uso: Recuperar acceso
 - [ ] 📄 Diagrama de secuencia
 - [ ] 📄 Manual: Recuperar acceso y eliminar cuenta
