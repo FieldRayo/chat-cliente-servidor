@@ -4,6 +4,7 @@ import chat.comun.protocolo.Paquete;
 import chat.comun.protocolo.Tipo;
 import chat.servidor.bd.BaseDatos;
 import chat.servidor.cuenta.CuentaServicio;
+import chat.servidor.gui.VentanaServidor;
 import chat.servidor.login.LoginServicio;
 import chat.servidor.registro.RegistroServicio;
 
@@ -30,8 +31,8 @@ public final class ServidorMain {
         // 1. Base de datos (02): crea chat.db y sus tablas si no existen.
         BaseDatos.inicializar();
 
-        // 2. Ventana del servidor (04): cuando esté lista, se abre aquí y se conecta con
-        //    Eventos.alRegistrar(bitacora::registrar). Mientras, los eventos salen en consola.
+        // 2. Ventana del servidor (04): muestra la bitácora y conecta Eventos con Bitacora.
+        VentanaServidor.abrir(Paquete.PUERTO);
 
         // 3. Servicios de cada área. Una línea por servicio; los que faltan se agregan al terminarlos.
         Despachador despachador = new Despachador();
