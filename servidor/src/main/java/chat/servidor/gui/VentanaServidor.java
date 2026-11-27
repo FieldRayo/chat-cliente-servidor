@@ -144,10 +144,11 @@ public class VentanaServidor extends JFrame {
     }
 
     /**
-     * Conecta los eventos del núcleo con la bitácora y muestra la ventana.
-     * Se puede llamar desde cualquier hilo (la ventana se crea en el hilo de Swing).
+     * Carga el historial guardado, conecta los eventos del núcleo con la bitácora y muestra la ventana.
+     * Se llama después de BaseDatos.inicializar(). Se puede llamar desde cualquier hilo.
      */
     public static void abrir(int puerto) {
+        Bitacora.cargarDesdeBD();
         Eventos.alRegistrar(Bitacora::registrar);
         SwingUtilities.invokeLater(() -> new VentanaServidor(puerto).setVisible(true));
     }
