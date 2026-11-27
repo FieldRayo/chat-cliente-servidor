@@ -39,7 +39,7 @@ public class SeguridadDAO {
 
     public void agregarPregunta(String pregunta) {
         try (Connection c = BaseDatos.obtenerConexion();
-             PreparedStatement ps = c.prepareStatement("INSERT IGNORE INTO preguntas_seguridad (pregunta) VALUES (?)")) {
+             PreparedStatement ps = c.prepareStatement("INSERT OR IGNORE INTO preguntas_seguridad (pregunta) VALUES (?)")) {
             ps.setString(1, pregunta);
             ps.executeUpdate();
         } catch (SQLException e) {

@@ -8,11 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class UsuarioDAO {
-    public static final int RESPUESTAS_REQUERIDAS = 3;
-
     public boolean existeNombre(String nombreUsuario) {
         return existe("SELECT 1 FROM usuarios WHERE nombre_usuario = ?", nombreUsuario);
     }
@@ -22,15 +19,13 @@ public class UsuarioDAO {
     }
 
     /**
-     * Registra al usuario y sus 3 respuestas de seguridad en una sola transacción.
-     * @param hashPsw   contraseña ya hasheada
-     * @param respuestasHash id_pregunta -> hash de la respuesta normalizada (exactamente 3)
+     * Registra al usuario y su respuesta de seguridad en una sola transacción.
+     * @param hashPsw       contraseña ya hasheada ({@code Hash.generar})
+     * @param idPregunta    id en preguntas_seguridad (1 a 5, el combo de 05 · Registro)
+     * @param respuestaHash respuesta ya hasheada ({@code Hash.generarRespuesta})
      * @return id del usuario nuevo
      */
-    public int registrar(String nombreUsuario, String email, String hashPsw, Map<Integer, String> respuestasHash) {
-        if (respuestasHash == null || respuestasHash.size() != RESPUESTAS_REQUERIDAS) {
-            throw new IllegalArgumentException("Se requieren exactamente " + RESPUESTAS_REQUERIDAS + " respuestas");
-        }
+    public int registrar(String nombreUsuario, String email, String hashPsw, int idPregunta, String respuestaHash) {
         try (Connection c = BaseDatos.obtenerConexion()) {
             c.setAutoCommit(false);
             try {
@@ -49,13 +44,10 @@ public class UsuarioDAO {
                 }
                 try (PreparedStatement ps = c.prepareStatement(
                         "INSERT INTO respuestas_seguridad (id_usuario, id_pregunta, respuesta_hash) VALUES (?, ?, ?)")) {
-                    for (Map.Entry<Integer, String> r : respuestasHash.entrySet()) {
-                        ps.setInt(1, idUsuario);
-                        ps.setInt(2, r.getKey());
-                        ps.setString(3, r.getValue());
-                        ps.addBatch();
-                    }
-                    ps.executeBatch();
+                    ps.setInt(1, idUsuario);
+                    ps.setInt(2, idPregunta);
+                    ps.setString(3, respuestaHash);
+                    ps.executeUpdate();
                 }
                 c.commit();
                 return idUsuario;

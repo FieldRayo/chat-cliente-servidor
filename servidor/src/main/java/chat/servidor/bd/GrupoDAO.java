@@ -140,7 +140,7 @@ public class GrupoDAO {
     }
 
     public boolean agregarInvitado(int idGrupo, int idUsuario) {
-        String sql = "INSERT IGNORE INTO miembros_grupo (id_grupo, id_usuario, estado) VALUES (?, ?, 'invitado')";
+        String sql = "INSERT OR IGNORE INTO miembros_grupo (id_grupo, id_usuario, estado) VALUES (?, ?, 'invitado')";
         return modificar(sql, idGrupo, idUsuario);
     }
 
