@@ -3,10 +3,13 @@ package chat.servidor.gui;
 import chat.comun.protocolo.Paquete;
 import chat.servidor.bd.BaseDatos;
 import chat.servidor.nucleo.Eventos;
+import chat.servidor.nucleo.ServidorMain;
+import chat.servidor.nucleo.Sesiones;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.WindowAdapter;
@@ -15,8 +18,10 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
@@ -26,12 +31,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -59,6 +66,14 @@ public class VentanaServidor extends JFrame {
     private final PanelConsulta panelAmistades;
     private final PanelConsulta panelGrupos;
     private final PanelConsulta panelMensajes;
+
+    // ---- Monitoreo de carga (para ver si el servidor se está saturando) ----
+    private final JLabel lblSesiones = new JLabel();
+    private final JProgressBar barraCarga = new JProgressBar(0, ServidorMain.MAX_CLIENTES);
+    private final JLabel lblNivel = new JLabel();
+    private final JLabel lblEventosMinuto = new JLabel();
+    /** Momento (en milisegundos) de cada evento nuevo; sirve para contar los del último minuto. */
+    private final Deque<Long> tiemposEventos = new ArrayDeque<>();
 
     public VentanaServidor(int puerto) {
         super("Servidor de chat");
@@ -129,6 +144,11 @@ public class VentanaServidor extends JFrame {
         });
         panelUsuarios.actualizar();
 
+        // Monitoreo: cada evento nuevo cuenta para "eventos por minuto", y cada segundo se refrescan los números.
+        Bitacora.alAgregar(evento -> tiemposEventos.addLast(System.currentTimeMillis()));
+        actualizarMonitoreo();
+        new Timer(1000, e -> actualizarMonitoreo()).start();
+
         // Cerrar la ventana apaga el servidor, así que primero se pregunta.
         addWindowListener(new WindowAdapter() {
             @Override
@@ -144,10 +164,11 @@ public class VentanaServidor extends JFrame {
     }
 
     /**
-     * Conecta los eventos del núcleo con la bitácora y muestra la ventana.
-     * Se puede llamar desde cualquier hilo (la ventana se crea en el hilo de Swing).
+     * Carga el historial guardado, conecta los eventos del núcleo con la bitácora y muestra la ventana.
+     * Se llama después de BaseDatos.inicializar(). Se puede llamar desde cualquier hilo.
      */
     public static void abrir(int puerto) {
+        Bitacora.cargarDesdeBD();
         Eventos.alRegistrar(Bitacora::registrar);
         SwingUtilities.invokeLater(() -> new VentanaServidor(puerto).setVisible(true));
     }
@@ -155,8 +176,16 @@ public class VentanaServidor extends JFrame {
     // ------------------------------------------------------------------ partes de la ventana
 
     private JPanel crearEncabezado(int puerto) {
+        JPanel encabezado = new JPanel(new BorderLayout());
+        encabezado.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+        encabezado.add(crearDatosConexion(puerto), BorderLayout.NORTH);
+        encabezado.add(crearMonitoreo(), BorderLayout.SOUTH);
+        return encabezado;
+    }
+
+    /** IP y puerto del servidor, para que los clientes sepan a dónde conectarse. */
+    private JPanel crearDatosConexion(int puerto) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 8));
-        panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 
         JLabel lblEstado = new JLabel("● Encendido");
         lblEstado.setForeground(new Color(0, 140, 60));
@@ -175,6 +204,23 @@ public class VentanaServidor extends JFrame {
         panel.add(lblIp);
         panel.add(lblPuerto);
         panel.add(lblAyuda);
+        return panel;
+    }
+
+    /** Cuántas sesiones hay contra el máximo que aguanta el servidor y cuánto movimiento hay. */
+    private JPanel crearMonitoreo() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 4));
+        barraCarga.setStringPainted(true);
+        barraCarga.setPreferredSize(new Dimension(180, 18));
+        lblNivel.setFont(lblNivel.getFont().deriveFont(Font.BOLD));
+        lblEventosMinuto.setToolTipText("Cuántos eventos llegaron a la bitácora en los últimos 60 segundos");
+
+        panel.add(new JLabel("Carga:"));
+        panel.add(lblSesiones);
+        panel.add(barraCarga);
+        panel.add(lblNivel);
+        panel.add(new JLabel("·"));
+        panel.add(lblEventosMinuto);
         return panel;
     }
 
@@ -241,6 +287,33 @@ public class VentanaServidor extends JFrame {
 
         ordenador.setRowFilter(filtros.isEmpty() ? null : RowFilter.andFilter(filtros));
         actualizarContador();
+    }
+
+    /** Refresca los números de carga. Corre en el hilo de Swing (lo llama el Timer). */
+    private void actualizarMonitoreo() {
+        int sesiones = Sesiones.conectados().size();
+        int maximo = ServidorMain.MAX_CLIENTES;
+        lblSesiones.setText("Sesiones activas: " + sesiones + " / " + maximo);
+        barraCarga.setValue(sesiones);
+        barraCarga.setString(Math.round(sesiones * 100.0 / maximo) + "%");
+
+        double porcentaje = (double) sesiones / maximo;
+        if (porcentaje >= 0.9) {
+            lblNivel.setText("Saturado");
+            lblNivel.setForeground(new Color(190, 0, 0));
+        } else if (porcentaje >= 0.6) {
+            lblNivel.setText("Carga alta");
+            lblNivel.setForeground(new Color(200, 120, 0));
+        } else {
+            lblNivel.setText("Normal");
+            lblNivel.setForeground(new Color(0, 140, 60));
+        }
+
+        long haceUnMinuto = System.currentTimeMillis() - 60_000;
+        while (!tiemposEventos.isEmpty() && tiemposEventos.peekFirst() < haceUnMinuto) {
+            tiemposEventos.removeFirst();
+        }
+        lblEventosMinuto.setText("Eventos en el último minuto: " + tiemposEventos.size());
     }
 
     private void actualizarContador() {

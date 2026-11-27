@@ -1,6 +1,7 @@
 package chat.servidor.gui;
 
 import chat.comun.protocolo.Tipo;
+import chat.servidor.bd.BitacoraDAO;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,30 +42,53 @@ public final class Bitacora {
     /** Quién quiere enterarse de cada evento nuevo (la ventana). */
     private static final List<Consumer<Evento>> oyentes = new CopyOnWriteArrayList<>();
 
+    /** Donde se guarda cada evento para que el historial sobreviva a un reinicio (lo hizo 02). */
+    private static final BitacoraDAO bitacoraDAO = new BitacoraDAO();
+
     private Bitacora() { }
 
     /**
-     * Anota un evento con la fecha y hora actual y lo manda a la ventana.
-     * TODO (cuando 02 · Base de datos suba BitacoraDAO): guardarlo también en la BD.
+     * Anota un evento con la fecha y hora actual: lo guarda en la BD y lo manda a la ventana.
+     * Si la BD falla, el evento igual se muestra (la bitácora nunca debe tumbar al servidor).
      */
     public static void registrar(String texto) {
         if (texto == null || texto.isBlank()) {
             return;
         }
-        Evento evento = new Evento(LocalDateTime.now().format(FORMATO_FECHA), texto.trim());
-        agregar(evento);
+        String limpio = texto.trim();
+        try {
+            bitacoraDAO.guardar(limpio);
+        } catch (RuntimeException e) {
+            System.err.println("No se pudo guardar en la bitácora de la BD: " + e.getMessage());
+        }
+        agregar(new Evento(LocalDateTime.now().format(FORMATO_FECHA), limpio));
     }
 
     /**
-     * Mete eventos viejos al historial sin cambiarles la fecha.
-     * Sirve para cargar lo que ya estaba guardado en la BD al arrancar el servidor.
+     * Carga lo que ya estaba guardado en la BD (de veces anteriores que se prendió el servidor).
+     * Se llama una vez al arrancar, antes de que lleguen eventos nuevos. No vuelve a guardar nada.
      */
-    public static void cargarHistorial(List<String[]> filas) {
-        for (String[] fila : filas) {
-            if (fila != null && fila.length >= 2) {
-                agregar(new Evento(fila[0], fila[1]));
+    public static void cargarDesdeBD() {
+        try {
+            for (String linea : bitacoraDAO.listar()) {
+                agregar(desdeLinea(linea));
             }
+        } catch (RuntimeException e) {
+            System.err.println("No se pudo leer la bitácora de la BD: " + e.getMessage());
         }
+    }
+
+    /**
+     * BitacoraDAO.listar() regresa cada evento como "yyyy-MM-dd HH:mm:ss  evento".
+     * Aquí se separa la fecha (los primeros 19 caracteres) del texto.
+     */
+    static Evento desdeLinea(String linea) {
+        int largoFecha = 19;
+        if (linea != null && linea.length() > largoFecha + 2
+                && linea.startsWith("  ", largoFecha)) {
+            return new Evento(linea.substring(0, largoFecha), linea.substring(largoFecha + 2));
+        }
+        return new Evento("", linea == null ? "" : linea);
     }
 
     /** Copia del historial, para que la ventana pinte lo que pasó antes de abrirse. */
