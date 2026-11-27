@@ -566,10 +566,10 @@ flowchart LR
 - [x] 💻 Búsqueda y filtro en el historial
 - [x] 💻 Vista de usuarios, amistades, grupos y mensajes
 - [x] 💻 Bitácora guardada en la BD
-- [ ] 📄 Caso de uso: Consultar bitácora
-- [ ] 📄 Diagrama de secuencia
-- [ ] 📄 Manual: ¿Cómo se usa el servidor?
-- [ ] 📄 Conclusión
+- [x] 📄 Caso de uso: Consultar bitácora
+- [x] 📄 Diagrama de secuencia
+- [x] 📄 Manual: ¿Cómo se usa el servidor?
+- [x] 📄 Conclusión
 
 <details>
 <summary><b>📖 Guía detallada: qué tienes que hacer</b></summary>
