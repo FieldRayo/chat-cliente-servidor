@@ -562,7 +562,7 @@ flowchart LR
 >
 > 🔗 **Te necesitan:** **03 · Servidor**, que registra cada paquete en tu bitácora · **Dependes de:** **02 · Base de datos** (`BitacoraDAO`) y **03 · Servidor**.
 
-- [ ] 💻 Bitácora en tiempo real
+- [x] 💻 Bitácora en tiempo real
 - [x] 💻 Búsqueda y filtro en el historial
 - [x] 💻 Vista de usuarios, amistades, grupos y mensajes
 - [ ] 💻 Bitácora guardada en la BD
